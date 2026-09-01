@@ -1,0 +1,21 @@
+# 1. Ignore everything across the workspace by default
+*
+
+# 2. Allow Git to traverse directory structures
+!*/
+
+# 3. Whitelist repository control & UE5 project files
+!.gitignore
+!*.uproject
+
+# 4. Whitelist C++ source files, headers, and C# build rules
+!Source/
+!Source/**
+
+# 5. Whitelist module configurations and Gameplay Tag INIs
+!Config/
+!Config/**
+
+# 6. Exclude generated compilation folders inside Source
+Source/**/Intermediate/
+Source/**/Binaries/

@@ -5,6 +5,7 @@
 #include "AbilitySystem/X_AbilitySystemLibrary.h"
 #include "AbilitySystem/X_AttributeSet.h"
 #include "GAS_Aura/UtilityClasses/X_GameplayTags.h"
+#include "Engine/AssetManager.h"
 
 void UX_UI_Controller_HUD::BroadcastCurrentModelValues()
 {
@@ -150,6 +151,9 @@ void UX_UI_Controller_HUD::BindToGameplayEffectAssetTagsDelegate(UX_AbilitySyste
 		return;
 	}
 	
+	// Warm up / stream-preload all soft assets in the Data Table.
+	PreloadScreenMessageDataTableAssets();
+	
 		// Always use AddWeakLambda when binding to delegates that might outlive the UI widget.
 		XASC->OnIncomingGameplayEffectAssetTags.AddWeakLambda(this,
 		[this](const FGameplayTagContainer& GameplayEffectAssetTags)
@@ -181,4 +185,53 @@ void UX_UI_Controller_HUD::BindToGameplayEffectAssetTagsDelegate(UX_AbilitySyste
 			}
 		}
 	);
+}
+
+void UX_UI_Controller_HUD::PreloadScreenMessageDataTableAssets()
+{
+	// Safety Guard: Verify that the Data Table pointer assigned in the Blueprint Editor is valid before we continue.
+	if (!IsValid(DataTableScreenMessageItemPickup)) return;
+
+	// Temporary container used to accumulate soft asset paths extracted from each row of the Data Table.
+	TArray<FSoftObjectPath> AssetsToLoad;
+
+	// Iterate through every row defined in DataTableScreenMessageItemPickup using our custom FScreenMessageItemPickupRowStructure struct.
+	DataTableScreenMessageItemPickup->ForeachRow<FScreenMessageItemPickupRowStructure>(
+		TEXT("PreloadScreenMessageDataTableAssets"),
+		[&AssetsToLoad](const FName& Key, const FScreenMessageItemPickupRowStructure& Row)
+		{
+			if (!Row.Image.IsNull())
+			{
+				AssetsToLoad.AddUnique(Row.Image.ToSoftObjectPath());
+			}
+			if (!Row.View.IsNull())
+			{
+				AssetsToLoad.AddUnique(Row.View.ToSoftObjectPath());
+			}
+		});
+
+	if (!AssetsToLoad.IsEmpty())
+	{
+		// Request the global Engine AssetManager's StreamableManager to load all accumulated paths asynchronously in the background.
+		// We pass a UObject delegate pointing to OnScreenMessageAssetsPreloaded and forward AssetsToLoad as a parameter payload to the completion callback.
+		UAssetManager::GetStreamableManager().RequestAsyncLoad(
+			AssetsToLoad,
+			FStreamableDelegate::CreateUObject(this, &ThisClass::OnScreenMessageAssetsPreloaded, AssetsToLoad)
+		);
+	}
+}
+
+void UX_UI_Controller_HUD::OnScreenMessageAssetsPreloaded(TArray<FSoftObjectPath> PreloadedPaths)
+{
+	// Iterate through every soft object path that was handed back to us upon completion of the asynchronous stream request.
+	for (const FSoftObjectPath& Path : PreloadedPaths)
+	{
+		// Attempt to resolve the soft path string into a hard, in-memory UObject pointer (guaranteed non-blocking since AsyncLoad just completed).
+		if (UObject* LoadedAsset = Path.ResolveObject())
+		{
+			// Add the resolved UObject pointer into our GC-protected member array (PreloadedScreenMessageAssets).
+			// Because PreloadedScreenMessageAssets is decorated with UPROPERTY() in the header, Unreal's Garbage Collector is prohibited from purging these UI widgets and textures from RAM while this Controller lives.
+			PreloadedScreenMessageAssets.AddUnique(LoadedAsset);
+		}
+	}
 }

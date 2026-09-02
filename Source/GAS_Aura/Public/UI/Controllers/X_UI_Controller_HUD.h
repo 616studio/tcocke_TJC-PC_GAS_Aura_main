@@ -123,6 +123,42 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "***CUSTOM|UI")
 	TObjectPtr<UDataTable> DataTableScreenMessageItemPickup;
 	
+	/**
+	 * <summary>
+	 * Asynchronously preloads all <c>TSoftClassPtr</c> and <c>TSoftObjectPtr</c> references declared inside <c>DataTableScreenMessageItemPickup</c>.
+	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Hitch Mitigation:</b> Eliminates Game Thread stalls (hitching) during active gameplay by streaming soft asset references into RAM before item pickup events fire.</description></item>
+	 * <item><description><b>Streamable Manager Integration:</b> Utilizes <c>FStreamableManager</c> through the global <c>UAssetManager</c> singleton to execute non-blocking disk I/O background reads.</description></item>
+	 * </list>
+	 * </remarks>
+	 */
+	void PreloadScreenMessageDataTableAssets();
+
+	/**
+	 * <summary>
+	 * Asynchronous completion callback executed when <c>UAssetManager</c> finishes streaming the soft asset paths requested by <c>PreloadScreenMessageDataTableAssets</c>.
+	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Garbage Collection Anchoring:</b> Resolves streamed paths into hard pointers and caches them in <c>PreloadedScreenMessageAssets</c> (<c>UPROPERTY</c>) to prevent GC eviction during gameplay.</description></item>
+	 * </list>
+	 * </remarks>
+	 * <param name="PreloadedPaths">[<c>TArray&lt;FSoftObjectPath&gt;</c>]: The collection of soft object paths that were asynchronously loaded into memory.</param>
+	 */
+	void OnScreenMessageAssetsPreloaded(TArray<FSoftObjectPath> PreloadedPaths);
+
+	/** 
+	 * <summary>
+	 * Holds hard UPROPERTY references to preloaded UI assets to prevent GC collection during gameplay.
+	 * </summary>
+	 */
+	UPROPERTY()
+	TArray<TObjectPtr<UObject>> PreloadedScreenMessageAssets;
+	
 private:
 	
 	/**

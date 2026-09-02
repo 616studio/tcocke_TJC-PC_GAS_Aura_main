@@ -20,6 +20,33 @@ void AX_GameplayEffectActor_Base::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	
+}
+
+void AX_GameplayEffectActor_Base::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	// Preserves native engine delegates and allows child Blueprints to optionally listen to ActorBeginOverlap
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	// Authoritative server guard for GAS effect application.
+	// We do this because modifying Gameplay Ability System states (Attributes and Gameplay Effects) must be strictly server-authoritative to prevent cheat vulnerabilities, double-application, and replication desyncs.
+	if (HasAuthority())
+	{
+		OnBeginOverlap(OtherActor);
+	}
+}
+
+void AX_GameplayEffectActor_Base::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	// Preserves native engine delegates and allows child Blueprints to optionally listen to ActorEndOverlap.
+	Super::NotifyActorEndOverlap(OtherActor);
+
+	// Authoritative server guard for GAS effect application.
+	// We do this because modifying Gameplay Ability System states (Attributes and Gameplay Effects) must be strictly server-authoritative to prevent cheat vulnerabilities, double-application, and replication desyncs.
+	if (HasAuthority())
+	{
+		OnEndOverlap(OtherActor);
+	}
 }
 
 bool AX_GameplayEffectActor_Base::ApplyGameplayEffectToTarget(AActor* TargetActor,

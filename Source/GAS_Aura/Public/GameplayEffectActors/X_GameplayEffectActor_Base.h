@@ -35,7 +35,22 @@ protected:
 	
 	/**
 	 * <summary>
-	 * Triggered via <c>OnComponentBeginOverlap</c> inside Blueprint-derived classes.
+	 * Native UE5 virtual overlap notifications derived from base AActor.
+	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>Invoked by the engine game thread when any attached <c>UPrimitiveComponent</c> (with <c>bGenerateOverlapEvents = true</c>) detects a collision overlap.</description></item>
+	 * <item><description>Calling <c>Super::NotifyActorBeginOverlap</c> internally broadcasts the <c>OnActorBeginOverlap</c> dynamic delegate and dispatches the Blueprint <c>ReceiveActorBeginOverlap</c> event.</description></item>
+	 * </list>
+	 * </remarks>
+	 */
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	
+	/**
+	 * <summary>
+	 * Triggered via <c>NotifyActorBeginOverlap</c>, which fires when any collision component attached to the root of this Actor triggers an overlap event.
 	 * </summary>
 	 * <param name="TargetActor">[<c>AActor*</c>]: The Actor overlapping with this GE Actor.</param>
 	 */
@@ -44,7 +59,7 @@ protected:
 
 	/**
 	 * <summary>
-	 * Triggered via <c>OnComponentEndOverlap</c> inside Blueprint-derived classes.
+	 * Triggered via <c>NotifyActorEndOverlap</c>, which fires when any collision component attached to the root of this Actor triggers an overlap event.
 	 * </summary>
 	 * <param name="TargetActor">[<c>AActor*</c>]: The Actor ending overlap with this GE Actor.</param>
 	 */

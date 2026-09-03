@@ -104,8 +104,8 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 		return; 
 	}
 
-	// The PlayerState contains the custom ASC and AS specific to the Player, so if we can't get them there's no point in continuing.
-	// We need our custom X_AbilitySystemComponent in order to call our custom function BindToGameplayEffectDelegates, so if we can't get it there's no point in continuing.
+	// Sanity Check:  the PlayerState contains the custom ASC and AS specific to the Player, so if we can't get them there's no point in continuing.
+	// We need our custom X_AbilitySystemComponent in order to call our custom function BindToGameplayEffectDelegate.
 	UX_AbilitySystemComponent* XASC = Cast<UX_AbilitySystemComponent>(PS->GetAbilitySystemComponent());
 	if (!IsValid(XASC)) 
 	{
@@ -113,7 +113,7 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 		return; 
 	}
 
-	// We need our custom Attribute Set to pass into InitView_HUD, so if we can't get it there's no point in continuing.
+	// We need our custom Attribute Set to pass into InitView_HUD.
 	UX_AttributeSet* XAS = Cast<UX_AttributeSet>(PS->GetAttributeSet());
 	if (!IsValid(XAS)) 
 	{
@@ -126,11 +126,11 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 	// This is why we call it inside PossessedBy because we know the Controller will be set on the SERVER by the time PossessedBy is called.
 	XASC->InitAbilityActorInfo(PS, this);
 	
-	// Bind to the ToTarget and ToSelf custom delegates.
+	// Bind to the custom delegate.
 	XASC->BindToGameplayEffectDelegate();
 	
 	// FIRST SPAWN: The Player State has no data yet. Grant everything.
-	// Server-Side Guard: Grant initial attributes EXACTLY ONCE per PlayerState lifetime
+	// Server-Side Guard: Grant initial attributes EXACTLY ONCE per PlayerState lifetime.
 	if (!PS->HasGrantedStartupData())
 	{
 		//InitializeAttributes(this, this, this, GetCharacterLevel());
@@ -174,11 +174,11 @@ void AX_Character_Player::InitAbilitySystemClientSide()
 	UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
 	if (!IsValid(ASC)) return;
 
-	// We need our custom X_AbilitySystemComponent here because BindToGameplayEffectDelegates only exists on our custom X_AbilitySystemComponent.
+	// Sanity Check:  we need our custom X_AbilitySystemComponent here because BindToGameplayEffectDelegate only exists on our custom X_AbilitySystemComponent.
 	UX_AbilitySystemComponent* XASC = Cast<UX_AbilitySystemComponent>(ASC);
 	if (!IsValid(XASC)) return;
 
-	// Strict Sanity Check: Ensure the Server has our specific custom AttributeSet.
+	// Sanity Check:  we need our custom Attribute Set to pass into InitView_HUD.
 	UX_AttributeSet* XAS = Cast<UX_AttributeSet>(PS->GetAttributeSet());
 	if (!IsValid(XAS)) 
 	{
@@ -194,7 +194,7 @@ void AX_Character_Player::InitAbilitySystemClientSide()
 		// This communicates to the ASC who its OwnerActor and AvatarActor are.
 		ASC->InitAbilityActorInfo(PS, this);
 
-		// Bind to delegates in our custom XASC.
+		// Bind to our custom delegate.
 		XASC->BindToGameplayEffectDelegate();
 
 		bAbilitySystemInitialized = true;

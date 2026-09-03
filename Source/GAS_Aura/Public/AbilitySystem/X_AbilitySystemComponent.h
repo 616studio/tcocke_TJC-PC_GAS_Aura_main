@@ -53,6 +53,7 @@ public:
 	 * <item><description><b>The Payload:</b> Transmits a lightweight <c>FGameplayTagContainer</c> containing only pre-filtered Asset Tags rather than the full heavy <c>FGameplayEffectSpec</c> struct.</description></item>
 	 * <item><description><b>Player Execution:</b> Bypasses the replication limitation of Instant Duration Gameplay Effects by forcing the Server to send the Gameplay Effect's Asset Tags to the local Client for UI feedback.</description></item>
 	 * <item><description><b>RPC Implementation:</b> Due to Unreal Header Tool (UHT) network serialization, the C++ definition for this function must be suffixed with <c>_Implementation</c>, while callers continue to use the standard name.</description></item>
+	 * <item><description><b>Client_ Prefix:</b> Naming convention for RPC functions suggests using prefix "Client_" for function names.</description></item> 
 	 * </list>
 	 * </remarks>
 	 * <param name="AssetTags">[<c>const FGameplayTagContainer&amp;</c>]: Pre-filtered collection of Asset Tags extracted on the server from the applied Gameplay Effect spec.</param>
@@ -62,7 +63,7 @@ public:
 	
 	/**
 	 * <summary>
-	 * Broadcasts the Asset Tags of any Gameplay Effect applied <b>TO</b> this ASC (by its owner or another Actor).
+	 * Broadcasts the Asset Tags of type "UI.Message" from any Gameplay Effect applied <b>TO</b> this ASC (by its owner or another Actor).
 	 * </summary>
 	 */
 	FX_GameplayEffectAssetTagsSignature OnIncomingGameplayEffectAssetTags;
@@ -85,13 +86,6 @@ private:
 	 * <summary>
 	 * Protects this class from duplicate delegate bindings if a Character (Player or NPC) is initialized multiple times.
 	 * </summary>
-	 * <remarks>
-	 * <b>ARCHITECTURE NOTES:</b>
-	 * <list type="bullet">
-	 * <item><description><b>Player Characters:</b> Guards the bindings inside <c>InitAbilitySystemServerSide</c> and <c>InitAbilitySystemClientSide</c>.</description></item>
-	 * <item><description><b>NPC Characters:</b> Guards the bindings inside <c>InitAbilitySystemServerAndClientSide</c>.</description></item>
-	 * </list>
-	 * </remarks>
 	 */
 	bool bDelegatesBound = false;
 	

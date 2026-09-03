@@ -100,7 +100,7 @@ public:
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
 	 * <item><description>Used to catch asynchronous replication race conditions where the PlayerState arrived first, but we were forced to wait on the Controller to arrive before initializing the HUD.</description></item>
-	 * <item><description>Also used by the <c><CameraRigComp></c> to ensure the Client's control rotation is synced to camera angle.</description></item>
+	 * <item><description>Also used by the <c>CameraRigComp</c> to ensure the Client's control rotation is synced to the camera angle.</description></item>
 	 * </list>
 	 * </remarks>
 	 */

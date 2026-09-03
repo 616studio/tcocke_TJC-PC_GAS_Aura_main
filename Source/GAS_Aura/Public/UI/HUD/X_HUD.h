@@ -23,7 +23,6 @@ class UX_UI_Controller_AttributeMenu;
  * <list type="bullet">
  * <item><description>Instantiates and owns <c>View_HUD</c> which contains all child Views specific to the local Player's viewport.</description></item>
  * <item><description>Subclassed in Blueprint as <c>BP_HUD</c> to allow designers to set class variables in the Editor.</description></item>
- * <item><description><b>Documentation:</b>  <a href="https://summer-paradox-663.notion.site/MVC-3cae565e9a8e80978f56df30014544cd?source=copy_link">MVC UI Architecture</a>
  * </list>
  * </remarks>
  */
@@ -119,6 +118,12 @@ private:
 	 * <summary>
 	 * Widget Blueprint class used to instantiate <c>View_HUD</c>.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>Class Default Object (CDO) Copies:</b> When NewObject instantiates a class from a TSubclassOf variable, it duplicates the Class Default Object (CDO) of that specific class. Subclassing in Blueprint allows the CDO to store serialized asset pointers assigned in the Editor.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
 	UPROPERTY(EditAnywhere, Category = "***CUSTOM|Classes|Views")
 	TSubclassOf<UX_UI_View_Base> View_HUDClass;
@@ -127,6 +132,12 @@ private:
 	 * <summary>
 	 * Blueprint class used to instantiate the Controller for <c>View_HUD</c>.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>Class Default Object (CDO) Copies:</b> When NewObject instantiates a class from a TSubclassOf variable, it duplicates the Class Default Object (CDO) of that specific class. Subclassing in Blueprint allows the CDO to store serialized asset pointers assigned in the Editor.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
 	UPROPERTY(EditAnywhere, Category = "***CUSTOM|Classes|Controllers")
 	TSubclassOf<UX_UI_Controller_HUD> View_HUDControllerClass;
@@ -135,6 +146,12 @@ private:
 	 * <summary>
 	 * Blueprint class used to instantiate the Controller for <c>View_AttributeMenu</c>.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>Class Default Object (CDO) Copies:</b> When NewObject instantiates a class from a TSubclassOf variable, it duplicates the Class Default Object (CDO) of that specific class. Subclassing in Blueprint allows the CDO to store serialized asset pointers assigned in the Editor.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
 	UPROPERTY(EditAnywhere, Category = "***CUSTOM|Classes|Controllers")
 	TSubclassOf<UX_UI_Controller_AttributeMenu> View_AttributeMenuControllerClass;

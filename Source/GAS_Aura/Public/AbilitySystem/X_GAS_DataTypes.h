@@ -16,6 +16,12 @@ class UBehaviorTree;
 
 /**
  * <summary>
+ * This file consolidates the declaration of all the different data types specific to GAS in the project.
+ * </summary>
+ */
+
+/**
+ * <summary>
  * Determines <b>WHEN</b> a Gameplay Effect should be applied to a target.
  * </summary>
  * <remarks>

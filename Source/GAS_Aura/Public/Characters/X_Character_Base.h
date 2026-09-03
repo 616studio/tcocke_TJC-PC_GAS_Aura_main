@@ -166,9 +166,9 @@ protected:
 	 * <param name="ASC">[<c>UAbilitySystemComponent*</c>]: The Target ASC.</param>
 	 * <param name="GameplayEffect">[<c>TSubclassOf</c>(<c>UGameplayEffect</c>)]: The specific Gameplay Effect class to apply.</param>
 	 * <param name="SourceObject">[<c>const UObject*</c>]: The Object applying the effect.</param>
-	 * <param name="InInstigator">[<c>AActor*</c>]: The instigating Actor.</param>
-	 * <param name="InEffectCauser">[<c>AActor*</c>]: The causing Actor.</param>
-	 * <param name="InCharacterLevel">[<c>int32</c>]: The level passed into the Effect Spec.</param>
+	 * <param name="InInstigator">[<c>AActor*</c>]: The actor that instigated the effect.</param>
+	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical actor that caused the effect.</param>
+	 * <param name="InCharacterLevel">[<c>int32</c>]: The level of the Character used to scale the effect.</param>
 	 */
 	void ApplyGameplayEffectToSelf(UAbilitySystemComponent* ASC, TSubclassOf<UGameplayEffect> GameplayEffect, const UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, int32 InCharacterLevel) const;
 	

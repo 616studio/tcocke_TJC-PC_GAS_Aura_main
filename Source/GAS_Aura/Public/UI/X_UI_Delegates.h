@@ -9,7 +9,20 @@
 
 #pragma region UHT Hack
 
-// Adding this dummy struct tricks the Unreal Header Tool into indexing this file so our DYNAMIC delegates work!
+/**
+ * <summary>
+ * This file was designed to keep all UI specific delegates in their own "class" file.  Adding this dummy struct tricks the Unreal Header Tool into indexing this file so our DYNAMIC delegates work!
+ * </summary>
+ * <remarks>
+ * <b>ARCHITECTURE NOTES:</b>
+ * <list type="bullet">
+ * <item><description><b>Dynamic Delegates Require Reflection:</b> DECLARE_DYNAMIC_MULTICAST_DELEGATE_* macros allow delegates to be serialized and bound inside Blueprint Event Graphs (BlueprintAssignable). Because of this Blueprint serialization, UHT must generate C++ reflection glue code for them inside X_UI_Delegates.generated.h.</description></item>
+ * <item><description><b>The UHT Parser Conflict:</b> Native C++ delegates (DECLARE_MULTICAST_DELEGATE_*) are non-reflected and do not use .generated.h. However, because the header contains DECLARE_DYNAMIC_MULTICAST_DELEGATE_* macros, we are forced to include #include "X_UI_Delegates.generated.h".</description></item>
+ * <item><description><b>Workaround: </b> Defining a minimal USTRUCT() decorated with GENERATED_BODY() acts as a reflected anchor, tricking UHT into generating the .generated.h code without throwing a parsing error.</description></item>
+ * </list>
+ * </remarks>
+ */
+// 
 USTRUCT()
 struct FX_UI_Delegates_DummyStruct
 {
@@ -20,13 +33,13 @@ struct FX_UI_Delegates_DummyStruct
 
 /**
  * <summary>
- * Used to broadcast the Asset Tags extracted from a Gameplay Effect applied to (incoming) or by (outgoing) the <c>X_AbilitySystemComponent</c>.
+ * Used to broadcast the Asset Tags specific to UI messages (UI.Message), extracted from any Gameplay Effect applied to the <c>X_AbilitySystemComponent</c>.
  * </summary>
  * <remarks>
  * <b>ARCHITECTURE NOTES:</b>
  * <list type="bullet">
  * <item><description><b>UI Decoupling:</b> Acts as the primary UI communication bridge between the <c>X_AbilitySystemComponent</c> Model and the Controllers.</description></item>
- * <item><description><b>Event-Driven Feedback:</b> Allows UI elements to react to item pickups by the Player purely by listening for specific tags, completely decoupling the View from the actual Gameplay Effect calculation logic.</description></item>
+ * <item><description><b>Event-Driven Feedback:</b> Allows UI elements to react to the Player's behavior purely by listening for specific tags, completely decoupling the View from the actual Gameplay Effect calculation logic.</description></item>
  * </list>
  * <b>DECLARED CLASSES:</b>
  * <list type="bullet">
@@ -51,13 +64,13 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FX_GameplayEffectAssetTagsSignature, const F
  * <item><description><c>X_UI_Controller_HUD</c></description></item>
  * </list>
  * </remarks>
- * <param name="Row">The <c>FScreenMessageItemPickupRowStructure</c> row structure containing the Message, image, and View required to display the message on the screen.</param>
+ * <param name="Row">The <c>FScreenMessageItemPickupRowStructure</c> row structure containing the Message, Image, and View required to display the message on the screen.</param>
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FX_ScreenMessageItemPickupSignature, FScreenMessageItemPickupRowStructure, Row);
 
 /**
  * <summary>
- * Used to broadcast a Gameplay Attribute UI specific payload to a View.
+ * Used to broadcast a consolidated Gameplay Attribute payload to a View.
  * </summary>
  * <remarks>
  * <b>ARCHITECTURE NOTES:</b>
@@ -76,7 +89,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FX_AttributeDisplayInfoSignature, co
 
 /**
  * <summary>
- * Broadcasts a consolidated Attribute payload for the Current and Max Values for UI elements to properly display the correct percentage values on "frame 0" of their initialization.
+ * Broadcasts a consolidated Gameplay Attribute payload for the Current and Max Values for UI elements to properly display the correct percentage values on "frame 0" of their initialization.
  * </summary>
  * <remarks>
  * <b>ARCHITECTURE NOTES:</b>

@@ -85,7 +85,7 @@ private:
 	 * <item><description>Binds this Controller to the downcast Model ASC's <c>GetGameplayAttributeValueChangeDelegate</c> for each Attribute using <c>AddWeakLambda</c>.</description></item>
 	 * <item><description><c>FOnGameplayAttributeValueChange</c> is the internal GAS notification that fires whenever the Base or Current Value of an Attribute is modified.</description></item>
 	 * <item><description>When a change is detected, the <c>NewValue</c> is extracted from the <c>FOnAttributeChangeData</c> payload.</description></item>
-	 * <item><description>Each Attribute is assigned an instance of our custom delegate used to broadcast the <c>NewValue</c> to its listeners.</description></item>
+	 * <item><description>The CurrentValue and MaxValue for Health and Mana are assigned to an instance of our custom delegate (<c>FX_UIAttributeDisplayCurrentMaxPayloadSignature</c>) used to broadcast their values to its listeners.</description></item>
 	 * </list>
 	 * </remarks>
 	 * <param name="XAS">[<c>UX_AttributeSet*</c>]: The downcast Model AS pointer that provides the Attribute definitions.</param>
@@ -147,7 +147,7 @@ protected:
 	 * <item><description><b>Garbage Collection Anchoring:</b> Resolves streamed paths into hard pointers and caches them in <c>PreloadedScreenMessageAssets</c> (<c>UPROPERTY</c>) to prevent GC eviction during gameplay.</description></item>
 	 * </list>
 	 * </remarks>
-	 * <param name="PreloadedPaths">[<c>TArray&lt;FSoftObjectPath&gt;</c>]: The collection of soft object paths that were asynchronously loaded into memory.</param>
+	 * <param name="PreloadedPaths">[<c>TArray of FSoftObjectPath</c>]: The collection of soft object paths that were asynchronously loaded into memory.</param>
 	 */
 	void OnScreenMessageAssetsPreloaded(TArray<FSoftObjectPath> PreloadedPaths);
 
@@ -169,7 +169,6 @@ private:
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
 	 * <item><description>Binds this Controller to the downcast Model ASC's <c>OnIncomingGameplayEffectAssetTags</c> delegate using <c>AddWeakLambda</c>.</description></item>
-	 * <item><description><c>OnIncomingGameplayEffectAssetTags</c> broadcasts the Asset Tags of any Gameplay Effect that gets applied to the associated ASC.</description></item>
 	 * <item><description>When a Gameplay Tag is received from <c>OnIncomingGameplayEffectAssetTags</c>, queries the <c>DataTableScreenMessageItemPickup</c> for a row that matches the Gameplay Tag.</description></item>
 	 * <item><description>If a matching row is found, <c>OnScreenMessageItemPickup</c> is used to broadcast the <c>FScreenMessageItemPickupRowStructure</c> payload to its listeners.</description></item>
 	 * </list>

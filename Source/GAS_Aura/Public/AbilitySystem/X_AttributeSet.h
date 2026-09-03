@@ -74,14 +74,14 @@ public:
 	* <list type="bullet">
 	* <item><description>We use <c>SetEffectProperties</c> to extract the relevant Source and Target data from the <c>FGameplayEffectModCallbackData</c> (<b>Data</b>) payload, giving us the exact context needed to calculate damage mitigations and trigger visual hit-reacts.</description></item>
 	* <item><description><b>ONLY</b> fires for Instant & Periodic effects (changes to the permanent Base Value).</description></item>
-	* <item><description><b>DOES NOT</b> fire for Duration & Infinite effects (temporary Current Value changes automatically handled by ASC).</description></item>
+	* <item><description><b>DOES NOT</b> fire for Duration & Infinite effects (temporary Current Value changes are automatically handled by the ASC's <c>FAggregator</c>).</description></item>
 	* </list>
 	* <b>PRIMARY RESPONSIBILITIES:</b>
 	* <list type="bullet">
 	* <item><description><b>"Meta-Attribute" Processing:</b> take the accumulated "IncomingDamage", manually subtract it from "Health", and reset IncomingDamage to 0.</description></item>
 	* <item><description><b>Clamping:</b> ensure changed Attributes stay within specified bounds (e.g., Health doesn't exceed MaxHealth).</description></item>
 	* <item><description><b>State Checks (Death Logic):</b> check if custom math caused Health to hit 0, and trigger death animations/logic.</description></item>
-	* <item><description><b>Visuals and Events:</b> spawn Floating Combat Text, perform hit-reacts, or trigger reactive passives (e.g., "Thorns" aura).</description></item>
+	* <item><description><b>Visuals and Events:</b> spawn Floating Combat Text, perform hit-reacts, or trigger reactive passives (ex: "Thorns" aura).</description></item>
 	* </list>
 	* <b>IMPORTANT:</b>
 	* <list type="bullet">

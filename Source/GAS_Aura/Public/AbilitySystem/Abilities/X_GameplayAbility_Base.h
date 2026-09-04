@@ -20,7 +20,7 @@ public:
 
 	/**
 	 * <summary>
-	 * Gameplay Tag of category <c>Custom.Input</c> used to bind this ability to a Player input (ex: <c>Custom.Input.LMB</c> or <c>Custom.Input.1</c>).
+	 * Gameplay Tag of category <c>Custom.Input</c> used to bind any derived ability to a Player input (ex: <c>Custom.Input.LMB</c> or <c>Custom.Input.1</c>).
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>

@@ -3,7 +3,7 @@
 
 #include "Characters/X_CharacterClassInfo.h"
 
-FX_CharacterClassDefaultInfo& UX_CharacterClassInfo::GetCharacterClassDefaultInfo(ECharacterClassType CharacterClassType)
+FX_CharacterClassDefaultInfo& UX_CharacterClassInfo::GetCharacterClassDefaultInfo(const ECharacterClass CharacterClass)
 {
-	return CharacterClassInformation.FindChecked(CharacterClassType);
+	return CharacterClassInformation.FindChecked(CharacterClass);
 }

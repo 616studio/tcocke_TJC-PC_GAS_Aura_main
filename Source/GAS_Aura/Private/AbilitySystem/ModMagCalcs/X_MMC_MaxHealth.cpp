@@ -1,6 +1,6 @@
 ﻿// Copyright © 2026 616 Studio LLC. All Rights Reserved. ([https://616.studio](https://616.studio))
 
-#include "ModMagCalcs/X_MMC_MaxHealth.h"
+#include "AbilitySystem/ModMagCalcs/X_MMC_MaxHealth.h"
 #include "AbilitySystem/X_AttributeSet.h"
 #include "Interfaces/X_CharacterInterface.h"
 

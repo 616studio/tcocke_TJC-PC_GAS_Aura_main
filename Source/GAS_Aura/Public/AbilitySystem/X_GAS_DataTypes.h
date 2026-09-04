@@ -197,6 +197,8 @@ struct FX_CharacterClassDefaultInfo
      * <b>ARCHITECTURE NOTES:</b>
      * <list type="bullet">
      * <item><description><b>Modifier Op (Override) + Modifier Magnitude (Attribute Base):</b> The initial values of the Resistance Attributes are derived from the Primary Attributes.</description></item>
+     * <item><description><b>Players (Hero Class):</b> The Duration Policy must be Infinite to maintain a "live link." This ensures the Secondary Attributes are updated dynamically whenever the Primary Attributes are changed.</description></item>
+     * <item><description><b>NPCs:</b> Since NPCs do not gain levels or change their Primary Attributes during gameplay, the Duration Policy is set to Instant.</description></item>
      * </list>
      * </remarks>
      */

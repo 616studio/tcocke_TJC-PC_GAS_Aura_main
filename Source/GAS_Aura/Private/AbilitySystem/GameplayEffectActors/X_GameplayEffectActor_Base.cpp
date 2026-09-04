@@ -1,7 +1,7 @@
 ﻿// Copyright © 2026 616 Studio LLC. All Rights Reserved. ([https://616.studio](https://616.studio))
 
 
-#include "GameplayEffectActors/X_GameplayEffectActor_Base.h"
+#include "AbilitySystem/GameplayEffectActors/X_GameplayEffectActor_Base.h"
 #include "AbilitySystem/X_AttributeSet.h"
 
 

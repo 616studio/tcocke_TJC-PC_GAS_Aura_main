@@ -1,7 +1,6 @@
 ﻿// Copyright © 2026 616 Studio LLC. All Rights Reserved. ([https://616.studio](https://616.studio))
 
 #include "GAS_Aura/Public/Characters/X_Character_Base.h"
-
 #include "GameplayTagContainer.h"
 #include "AbilitySystem/X_AbilitySystemComponent.h"
 #include "AbilitySystem/Abilities/X_GameplayAbility_Base.h"
@@ -43,108 +42,16 @@ UAttributeSet* AX_Character_Base::GetAttributeSet() const
 	return nullptr;
 }
 
-int32 AX_Character_Base::GetCharacterLevel() const
+void AX_Character_Base::SetCharacterLevel(const int32 NewLevel)
 {
-	return 0;
 }
 
-void AX_Character_Base::InitializeAttributes(UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, const int32 InCharacterLevel)
+void AX_Character_Base::SetCharacterClass(const ECharacterClass NewClassType)
 {
-	// Route through GameState so Clients can access the data for local prediction.
-	AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
-	if (!GameState) return;
-	
-	UX_CharacterClassInfo* ClassInfo = GameState->CharacterClassInfo;
-	if (!ensureMsgf(IsValid(ClassInfo), TEXT("Actor: %s - Missing data for Editor assigned variable (%s).  Function: %hs"),
-				   *GameState->GetName(),
-				   *GET_MEMBER_NAME_CHECKED(AX_GameState_Base, CharacterClassInfo).ToString(),
-				   __FUNCTION__))
-	{
-		return;
-	}
-	
-	TSubclassOf<UGameplayEffect> PrimaryAttributes = ClassInfo->GetCharacterClassDefaultInfo(CharacterClass).PrimaryAttributes;
-	if (!ensureMsgf(PrimaryAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (PrimaryAttributes) for CharacterClass:  %s.  Function: %hs"),
-	               *GetName(),
-	               *UEnum::GetValueAsString(CharacterClass),
-	               __FUNCTION__))
-	{
-		return;	
-	}
-	
-	TSubclassOf<UGameplayEffect> SecondaryAttributes = ClassInfo->GetCharacterClassDefaultInfo(CharacterClass).SecondaryAttributes;
-	if (!ensureMsgf(SecondaryAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (SecondaryAttributes) for CharacterClass:  %s.  Function: %hs"),
-				   *GetName(),
-				   *UEnum::GetValueAsString(CharacterClass),
-				   __FUNCTION__))
-	{
-		return;	
-	}
-	
-	TSubclassOf<UGameplayEffect> VitalAttributes = ClassInfo->GetCharacterClassDefaultInfo(CharacterClass).VitalAttributes;
-	if (!ensureMsgf(VitalAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (VitalAttributes) for CharacterClass:  %s.  Function: %hs"),
-				   *GetName(),
-				   *UEnum::GetValueAsString(CharacterClass),
-				   __FUNCTION__))
-	{
-		return;	
-	}
-	
-	TSubclassOf<UGameplayEffect> ResistanceAttributes = ClassInfo->GetCharacterClassDefaultInfo(CharacterClass).ResistanceAttributes;
-	if (!ensureMsgf(ResistanceAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (ResistanceAttributes) for CharacterClass:  %s.  Function: %hs"),
-				   *GetName(),
-				   *UEnum::GetValueAsString(CharacterClass),
-				   __FUNCTION__))
-	{
-		return;	
-	}
-
-	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
-	if (!ensureMsgf(IsValid(ASC), TEXT("Actor: %s - No valid (ASC) found.  Function: %hs"),
-	               *GetName(), 
-	               __FUNCTION__))
-	{
-		return;
-	}
-	
-	// WARNING: EXECUTION ORDER IS CRITICAL.
-	// GAS evaluates Gameplay Effects by taking a "snapshot" of Attributes at the exact moment they are applied to the owning ASC.
-	// We must guarantee that Attributes which CREATE data are applied before Attributes which NEED that data.
-	// 1. Primary Attributes: Establishes base values (each Attribute is set manually with a Modifier Op of "Override" and Magnitude Calc Type of "Scalable Float" with a value of "10").
-	// 2. Secondary Attributes: Uses values from Primary Attributes to calculate their own values (X_MMC_MaxHealth calculates MaxHealth using Vigor; X_MMC_MaxMana calculates MaxMana using Intelligence).
-	// 3. Vital Attributes: Uses values from Secondary Attributes to calculate their own values (Health copies in the value of MaxHealth; Mana copies in the value of MaxMana).
-	// 4. Resistance Attributes:  Uses values from both Primary Attributes and Secondary Attributes.
-	ApplyGameplayEffectToSelf(ASC, PrimaryAttributes, SourceObject, InInstigator, InEffectCauser, InCharacterLevel);
-	ApplyGameplayEffectToSelf(ASC, SecondaryAttributes, SourceObject, InInstigator, InEffectCauser, InCharacterLevel);
-	ApplyGameplayEffectToSelf(ASC, VitalAttributes, SourceObject, InInstigator, InEffectCauser, InCharacterLevel);
-	ApplyGameplayEffectToSelf(ASC, ResistanceAttributes, SourceObject, InInstigator, InEffectCauser, InCharacterLevel);
 }
 
-void AX_Character_Base::InitializeDefaultGameplayTags(UObject* SourceObject, AActor* InInstigator,
-	AActor* InEffectCauser, int32 InCharacterLevel)
+void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, const ECharacterClass InCharacterClass, const int32 InCharacterLevel)
 {
-	// Route through GameState so Clients can access the data for local prediction.
-	AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
-	if (!GameState) return;
-	
-	UX_CharacterClassInfo* ClassInfo = GameState->CharacterClassInfo;
-	if (!ensureMsgf(IsValid(ClassInfo), TEXT("Actor: %s - Missing data for Editor assigned variable (%s).  Function: %hs"),
-				   *GameState->GetName(),
-				   *GET_MEMBER_NAME_CHECKED(AX_GameState_Base, CharacterClassInfo).ToString(),
-				   __FUNCTION__))
-	{
-		return;
-	}
-	
-	TSubclassOf<UGameplayEffect> DefaultGameplayTags = ClassInfo->GetCharacterClassDefaultInfo(CharacterClass).DefaultGameplayTags;
-	if (!ensureMsgf(DefaultGameplayTags, TEXT("Actor: %s - Missing data for Editor assigned variable (DefaultGameplayTags) for CharacterClass:  %s.  Function: %hs"),
-				   *GetName(),
-				   *UEnum::GetValueAsString(CharacterClass),
-				   __FUNCTION__))
-	{
-		return;	
-	}
-	
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 	if (!ensureMsgf(IsValid(ASC), TEXT("Actor: %s - No valid (ASC) found.  Function: %hs"),
 				   *GetName(), 
@@ -153,16 +60,113 @@ void AX_Character_Base::InitializeDefaultGameplayTags(UObject* SourceObject, AAc
 		return;
 	}
 	
-	ApplyGameplayEffectToSelf(ASC, DefaultGameplayTags, SourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+	// Retrieve CharacterClassInfo from GameState.
+	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
+	const AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
+	if (!GameState) return;
+	
+	UX_CharacterClassInfo* ClassInfo = GameState->CharacterClassInfo;
+	if (!ensureMsgf(IsValid(ClassInfo), TEXT("Actor: %s - Missing data for Editor assigned variable (%s).  Function: %hs"),
+				   *GameState->GetName(),
+				   *GET_MEMBER_NAME_CHECKED(AX_GameState_Base, CharacterClassInfo).ToString(),
+				   __FUNCTION__))
+	{
+		return;
+	}
+
+	const TSubclassOf<UGameplayEffect> PrimaryAttributes = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).PrimaryAttributes;
+	if (!ensureMsgf(PrimaryAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (PrimaryAttributes) for CharacterClass:  %s.  Function: %hs"),
+	               *GetName(),
+	               *UEnum::GetValueAsString(InCharacterClass),
+	               __FUNCTION__))
+	{
+		return;	
+	}
+
+	const TSubclassOf<UGameplayEffect> SecondaryAttributes = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).SecondaryAttributes;
+	if (!ensureMsgf(SecondaryAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (SecondaryAttributes) for CharacterClass:  %s.  Function: %hs"),
+				   *GetName(),
+				   *UEnum::GetValueAsString(InCharacterClass),
+				   __FUNCTION__))
+	{
+		return;	
+	}
+
+	const TSubclassOf<UGameplayEffect> VitalAttributes = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).VitalAttributes;
+	if (!ensureMsgf(VitalAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (VitalAttributes) for CharacterClass:  %s.  Function: %hs"),
+				   *GetName(),
+				   *UEnum::GetValueAsString(InCharacterClass),
+				   __FUNCTION__))
+	{
+		return;	
+	}
+
+	const TSubclassOf<UGameplayEffect> ResistanceAttributes = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).ResistanceAttributes;
+	if (!ensureMsgf(ResistanceAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (ResistanceAttributes) for CharacterClass:  %s.  Function: %hs"),
+				   *GetName(),
+				   *UEnum::GetValueAsString(InCharacterClass),
+				   __FUNCTION__))
+	{
+		return;	
+	}
+
+	// WARNING: EXECUTION ORDER IS CRITICAL.
+	// GAS evaluates Gameplay Effects by taking a "snapshot" of Attributes at the exact moment they are applied to the owning ASC.
+	// We must guarantee that Attributes which CREATE data are applied before Attributes which NEED that data.
+	// 1. Primary Attributes: Establishes base values (each Attribute is set manually with a Modifier Op of "Override" and Magnitude Calc Type of "Scalable Float" with a value of "10").
+	// 2. Secondary Attributes: Uses values from Primary Attributes to calculate their own values (X_MMC_MaxHealth calculates MaxHealth using Vigor; X_MMC_MaxMana calculates MaxMana using Intelligence).
+	// 3. Vital Attributes: Uses values from Secondary Attributes to calculate their own values (Health copies in the value of MaxHealth; Mana copies in the value of MaxMana).
+	// 4. Resistance Attributes:  Uses values from both Primary Attributes and Secondary Attributes.
+	ApplyGameplayEffectToSelf(ASC, PrimaryAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+	ApplyGameplayEffectToSelf(ASC, SecondaryAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+	ApplyGameplayEffectToSelf(ASC, VitalAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+	ApplyGameplayEffectToSelf(ASC, ResistanceAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
 }
 
-void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const int32 InCharacterLevel)
+void AX_Character_Base::InitializeDefaultGameplayTags(UObject* InSourceObject, AActor* InInstigator,
+	AActor* InEffectCauser, const ECharacterClass InCharacterClass, const int32 InCharacterLevel)
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+	if (!ensureMsgf(IsValid(ASC), TEXT("Actor: %s - No valid (ASC) found.  Function: %hs"),
+				   *GetName(), 
+				   __FUNCTION__))
+	{
+		return;
+	}
+	
+	// Retrieve CharacterClassInfo from GameState.
+	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
+	const AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
+	if (!GameState) return;
+	
+	UX_CharacterClassInfo* ClassInfo = GameState->CharacterClassInfo;
+	if (!ensureMsgf(IsValid(ClassInfo), TEXT("Actor: %s - Missing data for Editor assigned variable (%s).  Function: %hs"),
+				   *GameState->GetName(),
+				   *GET_MEMBER_NAME_CHECKED(AX_GameState_Base, CharacterClassInfo).ToString(),
+				   __FUNCTION__))
+	{
+		return;
+	}
+
+	const TSubclassOf<UGameplayEffect> DefaultGameplayTags = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).DefaultGameplayTags;
+	if (!ensureMsgf(DefaultGameplayTags, TEXT("Actor: %s - Missing data for Editor assigned variable (DefaultGameplayTags) for Character Class:  %s.  Function: %hs"),
+				   *GetName(),
+				   *UEnum::GetValueAsString(InCharacterClass),
+				   __FUNCTION__))
+	{
+		return;	
+	}
+	
+	ApplyGameplayEffectToSelf(ASC, DefaultGameplayTags, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+}
+
+void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const ECharacterClass InCharacterClass, const int32 InCharacterLevel)
 {
 	// We only want to grant Gameplay Abilities on the Server Side.
 	if (!HasAuthority()) return;
 	
 	// We cast to our custom ASC to ensure we have access to the input functions we use with Gameplay Tags to tie Gameplay Abilities and Input Actions together.
-	// Currently, only the Hero class (the Player) needs access to this, but it saves having to do conditional casts for each Character type.
+	// Currently, only the Player needs access to this, but it saves having to do conditional casts for each Character type in the future.
 	UX_AbilitySystemComponent* XASC = Cast<UX_AbilitySystemComponent>(GetAbilitySystemComponent());
 	if (!ensureMsgf(IsValid(XASC), TEXT("Actor: %s - No valid (XASC) found.  Function: %hs"),
 				   *GetName(), __FUNCTION__))
@@ -170,7 +174,8 @@ void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const int32 
 		return;
 	}
 	
-	// Route through GameState so Clients can access the data for local prediction.
+	// Retrieve CharacterClassInfo from GameState.
+	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
 	AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
 	if (!GameState) return;
 	
@@ -183,13 +188,13 @@ void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const int32 
 		return;
 	}
 	
-	const FX_CharacterClassDefaultInfo& ClassDefaultInfo = ClassInfo->GetCharacterClassDefaultInfo(CharacterClass);
+	const FX_CharacterClassDefaultInfo& ClassDefaultInfo = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass);
 	
 	if (!ClassDefaultInfo.bShouldHaveDefaultAbilities) return;
 
 	if (!ensureMsgf(!ClassDefaultInfo.DefaultAbilities.IsEmpty(), TEXT("Actor: %s - %s has no abilities assigned.  Function: %hs"),
 	               *GetName(),
-	               *UEnum::GetValueAsString(CharacterClass),
+	               *UEnum::GetValueAsString(InCharacterClass),
 	               __FUNCTION__))
 	{
 		return;
@@ -197,14 +202,14 @@ void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const int32 
 
 	for (int32 i = 0; i < ClassDefaultInfo.DefaultAbilities.Num(); ++i)
 	{
-		TSubclassOf<UGameplayAbility> StartupAbility = ClassDefaultInfo.DefaultAbilities[i];
+		const TSubclassOf<UGameplayAbility> StartupAbility = ClassDefaultInfo.DefaultAbilities[i];
 
 		// Check if an empty array element was accidentally added.
 		if (!StartupAbility)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Actor: %s - Found an empty ability entry in %s at Index [%d]. Function: %hs"),
 				   *GetName(),
-				   *UEnum::GetValueAsString(CharacterClass),
+				   *UEnum::GetValueAsString(InCharacterClass),
 				   i,
 				   __FUNCTION__);
        
@@ -212,7 +217,7 @@ void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const int32 
 		}
 
 		// GAS requires us to create an FGameplayAbilitySpec wrapper for Gameplay Abilities before granting them to an ASC.
-		// We pass 'this' as the SourceObject so the Server and Client can sync contexts.
+		// We pass 'this' as the SourceObject since these are default Gameplay Abilities and Gameplay Tags being granted at startup by this Character to this Character.
 		FGameplayAbilitySpec StartupAbilitySpec = FGameplayAbilitySpec(StartupAbility, InCharacterLevel, INDEX_NONE, this);
 
 		// We have to cast to our custom X_GameplayAbility_Base class here in order to access our custom Gameplay Tag variable.
@@ -235,7 +240,8 @@ void AX_Character_Base::GrantClassSharedGameplayAbilitiesOnStartup(const int32 I
 	// We only want to grant Gameplay Abilities on the Server Side.
 	if (!HasAuthority()) return;
 	
-	// Route through GameState so Clients can access the data for local prediction.
+	// Retrieve CharacterClassInfo from GameState.
+	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
 	AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
 	if (!GameState) return;
 	
@@ -249,7 +255,7 @@ void AX_Character_Base::GrantClassSharedGameplayAbilitiesOnStartup(const int32 I
 	}
 	
 	// We cast to our custom ASC to ensure we have access to the input functions we use with Gameplay Tags to tie Gameplay Abilities and Input Actions together.
-	// Currently, only the Hero class (the Player) needs access to this, but it saves having to do conditional casts for each Character type.
+	// Currently, only the Player needs access to this, but it saves having to do conditional casts for each Character type.
 	UX_AbilitySystemComponent* XASC = Cast<UX_AbilitySystemComponent>(GetAbilitySystemComponent());
 	if (!ensureMsgf(IsValid(XASC), TEXT("Actor: %s - No valid (XASC) found.  Function: %hs"),
 				   *GetName(), __FUNCTION__))
@@ -263,12 +269,11 @@ void AX_Character_Base::GrantClassSharedGameplayAbilitiesOnStartup(const int32 I
 	{
 		TSubclassOf<UGameplayAbility> SharedAbility = ClassInfo->SharedGameplayAbilities[i];
 		
-		// Check if an empty array element was accidentally added.
+		// Check if an empty SharedGameplayAbilities array element was accidentally added.
 		if (!SharedAbility)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Actor: %s - Found an empty shared ability entry in %s at Index [%d]. Function: %hs"),
+			UE_LOG(LogTemp, Warning, TEXT("Actor: %s - Found an empty (Shared Gameplay Abilities) entry in (DA_CharacterClassInfo) at Index [%d]. Function: %hs"),
 				   *GetName(),
-				   *UEnum::GetValueAsString(CharacterClass),
 				   i,
 				   __FUNCTION__);
        
@@ -276,7 +281,7 @@ void AX_Character_Base::GrantClassSharedGameplayAbilitiesOnStartup(const int32 I
 		}
 		
 		// GAS requires us to create an FGameplayAbilitySpec wrapper for Gameplay Abilities before granting them to an ASC.
-		// We pass 'this' as the SourceObject so the Server and Client can sync contexts.
+		// We pass 'this' as the SourceObject since these are default Gameplay Abilities and Gameplay Tags being granted at startup by this Character to this Character.
 		FGameplayAbilitySpec SharedAbilitySpec = FGameplayAbilitySpec(SharedAbility, InCharacterLevel, INDEX_NONE, this);
 
 		// We have to cast to our custom X_GameplayAbility_Base class here in order to access our custom Gameplay Tag variable.
@@ -296,7 +301,17 @@ void AX_Character_Base::GrantClassSharedGameplayAbilitiesOnStartup(const int32 I
 
 void AX_Character_Base::ApplyGameplayEffectToSelf(UAbilitySystemComponent* ASC, const TSubclassOf<UGameplayEffect> GameplayEffect, const UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, const int32 InCharacterLevel) const
 {
-	// We aren't performing an IsValid check on the ASC or the Gameplay Effect class parameters as these are handled BEFORE we call this method in InitializeAttributes().
+	if (!ensureMsgf(IsValid(ASC), TEXT("Actor: %s - No valid (ASC) found.  Function: %hs"),
+	               *GetName(), __FUNCTION__))
+	{
+		return;
+	}
+
+	if (!ensureMsgf(IsValid(GameplayEffect), TEXT("Actor: %s - No valid (GameplayEffect) found.  Function: %hs"),
+	               *GetName(), __FUNCTION__))
+	{
+		return;
+	}
 	
 	// GAS requires GE's to be wrapped first in a ContextHandle so it can be polymorphic and properly replicated. 
 	// A Context Handle tells the system (for example) who caused the damage, what weapon was used, where the hit happened, etc.

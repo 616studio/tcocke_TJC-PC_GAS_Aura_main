@@ -115,17 +115,18 @@ struct FX_EffectProperties
  * </summary>
  */
 UENUM(BlueprintType)
-enum class ECharacterClassType : uint8
+enum class ECharacterClass : uint8
 {
     Elementalist,
     Warrior,
     Ranger,
-    Hero
+    Hero,
+    Unassigned
 };
 
 /**
  * <summary>
- * Helper struct to set the defaults associated with each <c>ECharacterClassType</c>.
+ * Helper struct to set the defaults associated with each <c>ECharacterClass</c>.
  * </summary>
  */
 USTRUCT(BlueprintType)
@@ -135,7 +136,7 @@ struct FX_CharacterClassDefaultInfo
     
     /**
      * <summary>
-     * The specific Behavior Tree to run when this class enters Combat.
+     * The specific Behavior Tree to run when the specified Character Class enters Combat.
      * </summary>
      */
     UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Class Defaults|AI")
@@ -145,6 +146,13 @@ struct FX_CharacterClassDefaultInfo
      * <summary>
      * Gameplay Effect used to set the initial values of the Primary Attributes: Intelligence, Strength, Resilience, and Vigor.
      * </summary>
+     * <remarks>
+     * <b>ARCHITECTURE NOTES:</b>
+     * <list type="bullet">
+     * <item><description><b>Modifier Op (Override):</b> We use Override because we want to force our initial Attributes to be a specific default value.</description></item>
+     * <item><description><b>Modifier Magnitude (Scalable Float):</b> We use Scalable Float for now instead of a derived value from a curve table or custom calculation classes.</description></item>
+     * </list>
+     * </remarks>
      */
     UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Class Defaults|Attributes")
     TSubclassOf<UGameplayEffect> PrimaryAttributes;
@@ -156,9 +164,11 @@ struct FX_CharacterClassDefaultInfo
      * <remarks>
      * <b>ARCHITECTURE NOTES:</b>
      * <list type="bullet">
-     * <item><description><b>Players (Hero Class):</b>The Duration Policy must be Infinite to maintain a "live link." This ensures the Secondary Attributes are updated dynamically whenever the Primary Attributes are changed.</description></item>
-     * <item><description><b>NPCs:</b> Since Secondary Since NPCs do not gain levels or change their Primary Attributes during gameplay, the Duration Policy is set to Instant.</description></item>
-     * <item><description>Max Health and Max Mana are derived from custom calculation classes <c>X_MMC_MaxHealth</c> and <c>X_MMC_MaxMana</c> respectively.</description></item>
+     * <item><description><b>Modifier Op (Add (Base)) + Modifier Magnitude (Attribute Based):</b> Secondary Attributes derive their values from Primary Attributes.</description></item>
+     * <item><description>Only MaxHealth and MaxMana are derived from custom calculation classes (<c>X_MMC_MaxHealth</c> and <c>X_MMC_MaxMana</c>).</description></item>
+     * <item><description><b>Players (Hero Class):</b> The Duration Policy must be Infinite to maintain a "live link." This ensures the Secondary Attributes are updated dynamically whenever the Primary Attributes are changed.</description></item>
+     * <item><description><b>NPCs:</b> Since NPCs do not gain levels or change their Primary Attributes during gameplay, the Duration Policy is set to Instant.</description></item>
+     
      * </list>
      * </remarks>
      */
@@ -172,7 +182,7 @@ struct FX_CharacterClassDefaultInfo
      * <remarks>
      * <b>ARCHITECTURE NOTES:</b>
      * <list type="bullet">
-     * <item><description>The values of the Vital Attributes are derived from the Secondary Attributes Max Health and Max Mana using custom calculation classes.</description></item>
+     * <item><description><b>Modifier Op (Override) + Modifier Magnitude (Attribute Based):</b> The initial values of the Vital Attributes are derived from the Secondary Attributes MaxHealth and MaxMana.</description></item>
      * </list>
      * </remarks>
      */
@@ -186,7 +196,7 @@ struct FX_CharacterClassDefaultInfo
      * <remarks>
      * <b>ARCHITECTURE NOTES:</b>
      * <list type="bullet">
-     * <item><description>The values of the Resistance Attributes are derived from the Primary Attributes.</description></item>
+     * <item><description><b>Modifier Op (Override) + Modifier Magnitude (Attribute Base):</b> The initial values of the Resistance Attributes are derived from the Primary Attributes.</description></item>
      * </list>
      * </remarks>
      */
@@ -195,7 +205,7 @@ struct FX_CharacterClassDefaultInfo
     
     /**
      * <summary>
-     * Infinite Gameplay Effect used to assign default Gameplay Tags to each <c>ECharacterClassType</c> that should remain indefinitely.
+     * Infinite Gameplay Effect used to assign default Gameplay Tags to each <c>ECharacterClass</c> that should remain indefinitely.
      * </summary>
      */
     UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Class Defaults")
@@ -203,7 +213,7 @@ struct FX_CharacterClassDefaultInfo
 
     /**
      * <summary>
-     * Default Gameplay Abilities assigned to each <c>ECharacterClassType</c>.
+     * Default Gameplay Abilities assigned to each <c>ECharacterClass</c>.
      * </summary>
      */
     UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Class Defaults|Abilities")
@@ -211,7 +221,7 @@ struct FX_CharacterClassDefaultInfo
 
     /**
      * <summary>
-     * Allows a class to start with no default abilities.
+     * Allows a class to start with no default Gameplay Abilities.
      * </summary>
      */
     UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Class Defaults|Abilities")
@@ -220,7 +230,7 @@ struct FX_CharacterClassDefaultInfo
 
 /**
  * <summary>
- * Helper struct to map Gameplay Tags to Anim Montages.
+ * Helper struct to map Gameplay Tags to AnimMontages.
  * </summary>
  */
 USTRUCT(BlueprintType)

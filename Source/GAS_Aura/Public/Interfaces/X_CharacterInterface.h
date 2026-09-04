@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystem/X_GAS_DataTypes.h"
 #include "UObject/Interface.h"
 #include "X_CharacterInterface.generated.h"
-
 
 
 // This class does not need to be modified.
@@ -30,5 +30,26 @@ public:
 	 * Retrieves the Character's current Level.
 	 * </summary>
 	 */
-	virtual int32 GetCharacterLevel() const { return 0; }
+	virtual int32 GetCharacterLevel() const = 0;
+
+	/**
+	 * <summary>
+	 * Sets the Character's Level.
+	 * </summary> 
+	 */
+	virtual void SetCharacterLevel(const int32 NewLevel) = 0;
+
+	/**
+	 * <summary>
+	 * Retrieves the Character's current Class.
+	 * </summary> 
+	 */
+	virtual ECharacterClass GetCharacterClass() const = 0;
+
+	/**
+	 * <summary>
+	 * Sets the Character's Class.
+	 * </summary>	 
+	 */
+	virtual void SetCharacterClass(const ECharacterClass NewClassType) = 0;
 };

@@ -11,12 +11,12 @@ class UX_CharacterClassInfo;
 
 /**
  * <summary>
- * The custom base class for the Game State.
+ * Holds globally accessible replicated data for both the Server and Clients.
  * </summary>
  * <remarks>
  * <b>ARCHITECTURE NOTES:</b>
  * <list type="bullet">
- * <item><description>Holds globally accessible data that must be replicated or accessed by both the Server and Clients (e.g., combat calculation data for local prediction).</description></item>
+ * <item><description>Preserves server-authoritative initialization while allowing local clients to access the same data for prediction and UI queries.</description></item>
  * </list>
  * </remarks>
  */

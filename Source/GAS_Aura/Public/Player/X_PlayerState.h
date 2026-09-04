@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "AbilitySystem/X_GAS_DataTypes.h"
 #include "GameFramework/PlayerState.h"
 #include "X_PlayerState.generated.h"
 
@@ -125,5 +126,33 @@ private:
 	void InitComponentsForAbilitySystem();
 
 #pragma endregion Ability System
+	
+#pragma region Player Character Specific
+	
+public:
+	
+	void SetPlayerCharacterLevel(const int32 NewLevel) { PlayerCharacterLevel = NewLevel; }
+	
+	void SetPlayerCharacterClass(const ECharacterClass NewClassType) { PlayerCharacterClass = NewClassType; }
+			
+protected:
+	/**
+	 * <summary>
+	 * The Player Character's current Level.
+	 * </summary>
+	 */
+	int32 PlayerCharacterLevel = 1;
+	
+	/**
+	 * <summary>
+	 * The Player Character's current Class.
+	 * </summary>
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|GAS|Character Class")
+	ECharacterClass PlayerCharacterClass = ECharacterClass::Warrior;
+	
+private:
+	
+#pragma endregion Player Character Specific
 	
 };

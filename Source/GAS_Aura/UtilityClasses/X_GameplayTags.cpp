@@ -5,42 +5,42 @@
 namespace XGameplayTags
 {
 #pragma region Attributes
-	UE_DEFINE_GAMEPLAY_TAG(Attributes, "Attributes");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes, "Attributes", "Root category for all Character Attributes.");
 
 	// Primary Attributes
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Primary, "Attributes.Primary");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Primary_Strength, "Attributes.Primary.Strength");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Primary_Intelligence, "Attributes.Primary.Intelligence");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Primary_Resilience, "Attributes.Primary.Resilience");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Primary_Vigor, "Attributes.Primary.Vigor");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary, "Attributes.Primary", "Primary Attribute container.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Strength, "Attributes.Primary.Strength", "Increases physical damage.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Intelligence, "Attributes.Primary.Intelligence", "Increases magical damage, Max Mana, and Mana Regeneration.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Resilience, "Attributes.Primary.Resilience", "Increases Armor and Armor Penetration.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Vigor, "Attributes.Primary.Vigor", "Increases Max Health and Health Regeneration.");
 
 	// Secondary Attributes
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary, "Attributes.Secondary");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_Armor, "Attributes.Secondary.Armor");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_ArmorPenetration, "Attributes.Secondary.ArmorPenetration");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_BlockChance, "Attributes.Secondary.BlockChance");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_CriticalHitChance, "Attributes.Secondary.CriticalHitChance");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_CriticalHitDamage, "Attributes.Secondary.CriticalHitDamage");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_CriticalHitResistance, "Attributes.Secondary.CriticalHitResistance");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_HealthRegeneration, "Attributes.Secondary.HealthRegeneration");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_ManaRegeneration, "Attributes.Secondary.ManaRegeneration");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_MaxHealth, "Attributes.Secondary.MaxHealth");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Secondary_MaxMana, "Attributes.Secondary.MaxMana");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary, "Attributes.Secondary", "Secondary Attribute container.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_Armor, "Attributes.Secondary.Armor", "Reduces damage taken, improves Block Chance and Critical Hit Resistance.  Scales with Resilience by a factor of 0.25 (1 point of Armor granted for every 4 points of Resilience).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_ArmorPenetration, "Attributes.Secondary.ArmorPenetration", "Ignores a percentage of enemy Armor, increases Critical Hit Chance and Critical Hit Damage.  Scales with Resilience by a factor of 1 (1 point of Armor Penetration granted for every 1 point of Resilience).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_BlockChance, "Attributes.Secondary.BlockChance", "Chance to cut incoming damage in half.  Scales with Armor by a factor of 0.25 (1 point of Block Chance granted for every 4 points of Armor).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_CriticalHitChance, "Attributes.Secondary.CriticalHitChance", "Chance to inflict double damage plus a Critical Hit Damage bonus.  Scales with Armor Penetration by a factor of 0.25 (1 point of Critical Hit Chance granted for every 4 points of Armor Penetration).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_CriticalHitDamage, "Attributes.Secondary.CriticalHitDamage", "Bonus damage added when a Critical Hit is scored.  Scales with Armor Penetration by a factor of 1.5 (1.5 points of Critial Hit Damage granted for every 1 point of Armor Penetration).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_CriticalHitResistance, "Attributes.Secondary.CriticalHitResistance", "Reduces Critical Hit Chance of attacking Enemies.  Scales with Armor by a factor of 0.25 (1 point of Critical Hit Resistance granted for every 4 points of Armor).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_HealthRegeneration, "Attributes.Secondary.HealthRegeneration", "Amount of Health regenerated every 1 second.  Scales with Vigor by a factor of 0.1 (1 point of Health Regeneration granted for every 10 points of Vigor).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_ManaRegeneration, "Attributes.Secondary.ManaRegeneration", "Amount of Mana regenerated every 1 second.  Scales with Intelligence by a factor of 0.1 (1 point of Mana Regeneration granted for every 10 points of Intelligence).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_MaxHealth, "Attributes.Secondary.MaxHealth", "Maximum amount of Health obtainable.  Scales with Vigor and Character Level (Formula from X_MMC_MaxHealth:  MaxHealth = BaseValue + (VigorMultiplier * Vigor) + (LevelMultiplier * CharacterLevel).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Secondary_MaxMana, "Attributes.Secondary.MaxMana", "Maximum amount of Mana obtainable.  Scales with Intelligence and Character Level (Formula from X_MMC_MaxMana:  MaxMana = BaseValue + (IntelligenceMultiplier * Intelligence) + (LevelMultiplier * CharacterLevel).");
 
 	// Vital Attributes
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Vital, "Attributes.Vital");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Vital_Health, "Attributes.Vital.Health");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Vital_Mana, "Attributes.Vital.Mana");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Vital, "Attributes.Vital", "Vital Attributes container.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Vital_Health, "Attributes.Vital.Health", "Represents the Character's current value of Health out of a total maximum value derived from Max Health.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Vital_Mana, "Attributes.Vital.Mana", "Represents the Character's current value of Mana out of a total maximum value derived from Max Mana.");
 
 	// Resistance Attributes
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Resistance, "Attributes.Resistance");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Resistance_Fire, "Attributes.Resistance.Fire");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Resistance_Ice, "Attributes.Resistance.Ice");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Resistance_Shock, "Attributes.Resistance.Shock");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Resistance_Poison, "Attributes.Resistance.Poison");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Resistance_Slashing, "Attributes.Resistance.Slashing");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Resistance_Crushing, "Attributes.Resistance.Crushing");
-	UE_DEFINE_GAMEPLAY_TAG(Attributes_Resistance_Piercing, "Attributes.Resistance.Piercing");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance, "Attributes.Resistance", "Resistance Attributes container.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Fire, "Attributes.Resistance.Fire", "Resistance to Fire damage.  Scales with Resilience and Intelligence by a factor of 0.25 (1 point of Fire Resistance for every 4 points of Resilience plus 1 point of Fire Resistance for every 4 points of Intelligence).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Ice, "Attributes.Resistance.Ice", "Resistance to Ice damage.  Scales with Resilience by a factor of X () and Intelligence by a factor of Y ().");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Shock, "Attributes.Resistance.Shock", "Resistance to Shock damage.  Scales with Resilience by a factor of X () and Intelligence by a factor of Y ().");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Poison, "Attributes.Resistance.Poison", "Resistance to Poison damage.  Scales with Resilience by a factor of X () and Intelligence by a factor of Y ().");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Slashing, "Attributes.Resistance.Slashing", "Resistance to Slashing damage.  Scales with Resilience by a factor of X () and Strength by a factor of Y ().");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Crushing, "Attributes.Resistance.Crushing", "Resistance to Crushing damage.  Scales with Resilience by a factor of X () and Strength by a factor of Y ().");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Piercing, "Attributes.Resistance.Piercing", "Resistance to Piercing damage.  Scales with Resilience by a factor of X () and Strength by a factor of Y ().");
 #pragma endregion Attributes
 
 #pragma region Character

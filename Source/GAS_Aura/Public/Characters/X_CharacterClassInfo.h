@@ -13,8 +13,13 @@ class UGameplayEffect;
 
 /**
  * <summary>
- * Data Asset stored as <c>DA_CharacterClassInfo</c> that contains the default Character specific info for each <c>ECharacterClassType</c>.
+ * Data Asset stored as <c>DA_CharacterClassInfo</c> that contains the default Character specific info for each <c>ECharacterClass</c>.
  * </summary>
+ * <remarks>
+ * <list type="bullet">
+ * <item><description>Stored on <c>X_GameState_Base</c> (assigned in Editor on <c>BP_GameState</c>) to allow access to the Data Asset on the Server and Clients.</description></item>
+ * </list>
+ * </remarks>
  */
 UCLASS()
 class GAS_AURA_API UX_CharacterClassInfo : public UDataAsset
@@ -24,18 +29,18 @@ class GAS_AURA_API UX_CharacterClassInfo : public UDataAsset
 public:
 	/**
 	 * <summary>
-	 * Maps each <c>ECharacterClassType</c> to its default values.
+	 * Maps each <c>ECharacterClass</c> to its default values.
 	 * </summary>
 	 */
-	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Classes")
-	TMap<ECharacterClassType, FX_CharacterClassDefaultInfo> CharacterClassInformation;
+	UPROPERTY(EditDefaultsOnly, Category = "Classes")
+	TMap<ECharacterClass, FX_CharacterClassDefaultInfo> CharacterClassInformation;
 
 	/**
 	 * <summary>
-	 * Gameplay Abilities shared between all default class types.
+	 * Gameplay Abilities shared between all Character Classes.
 	 * </summary>
 	 */
-	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Shared Class Defaults")
+	UPROPERTY(EditDefaultsOnly, Category = "Shared Class Defaults")
 	TArray<TSubclassOf<UGameplayAbility>> SharedGameplayAbilities;
 	
 	/**
@@ -51,16 +56,16 @@ public:
 	 * </list>
 	 * </remarks>
 	 */
-	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Shared Class Defaults")
+	UPROPERTY(EditDefaultsOnly, Category = "Shared Class Defaults")
 	TObjectPtr<UCurveTable> DamageCalcCoefficients;
 
 	/**
 	 * <summary>
-	 * Returns the <c>FX_CharacterClassDefaultInfo</c> for the specified <c>ECharacterClassType</c>.
+	 * Returns the <c>FX_CharacterClassDefaultInfo</c> for the specified <c>ECharacterClass</c>.
 	 * </summary>
 	 * 
 	 */	
-	FX_CharacterClassDefaultInfo& GetCharacterClassDefaultInfo(ECharacterClassType CharacterClassType);
+	FX_CharacterClassDefaultInfo& GetCharacterClassDefaultInfo(ECharacterClass CharacterClass);
 	
 	/**
 	 * <summary>
@@ -72,6 +77,6 @@ public:
 	 * </list>
 	 * </remarks>
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage Mapping")
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 };

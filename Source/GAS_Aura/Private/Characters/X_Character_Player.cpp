@@ -6,7 +6,10 @@
 #include "AbilitySystem/X_AbilitySystemComponent.h"
 #include "AbilitySystem/X_AttributeSet.h"
 #include "Camera/CameraComponent.h"
+#include "Characters/X_CharacterClassInfo.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameState/X_GameState_Base.h"
+#include "Kismet/GameplayStatics.h"
 #include "Player/X_PlayerCameraRigComponent.h"
 #include "Player/X_PlayerController.h"
 #include "Player/X_PlayerState.h"
@@ -51,7 +54,7 @@ void AX_Character_Player::PossessedBy(AController* NewController)
 	// Purely a sanity check despite PossessedBy being a server-only function.
 	if (!HasAuthority()) return;
 	
-	// DEDICATED SERVER
+	// AUTHORITATIVE SERVER (Dedicated & Listen Server)
 	InitAbilitySystemServerSide();
 	
 	// LISTEN SERVER - HOST SAFEGUARD:
@@ -98,10 +101,9 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 {
 	// Fail-Safe: If PlayerState hasn't replicated/attached yet during custom spawning, log a non-fatal ensure to catch the execution order in PIE.
 	AX_PlayerState* PS = GetPlayerState<AX_PlayerState>();
-	if (!IsValid(PS)) 
+	if (!ensureMsgf(IsValid(PS), TEXT("%s: PossessedBy executed before PlayerState was valid!"), *GetName()))
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: PossessedBy executed before PlayerState was valid!"), *GetName());
-		return; 
+		return;
 	}
 
 	// Sanity Check:  the PlayerState contains the custom ASC and AS specific to the Player, so if we can't get them there's no point in continuing.
@@ -113,7 +115,6 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 		return; 
 	}
 
-	// We need our custom Attribute Set to pass into InitView_HUD.
 	UX_AttributeSet* XAS = Cast<UX_AttributeSet>(PS->GetAttributeSet());
 	if (!IsValid(XAS)) 
 	{
@@ -133,10 +134,10 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 	// Server-Side Guard: Grant initial attributes EXACTLY ONCE per PlayerState lifetime.
 	if (!PS->HasGrantedStartupData())
 	{
-		//InitializeAttributes(this, this, this, GetCharacterLevel());
-		//InitializeDefaultGameplayTags(this, this, this, GetCharacterLevel());
-		//GrantClassDefaultGameplayAbilitiesOnStartup(GetCharacterLevel());
-		//GrantClassSharedGameplayAbilitiesOnStartup(GetCharacterLevel());
+		InitializeAttributes(this, this, this, GetCharacterClass(), GetCharacterLevel());
+		InitializeDefaultGameplayTags(this, this, this, GetCharacterClass(), GetCharacterLevel());
+		GrantClassDefaultGameplayAbilitiesOnStartup(GetCharacterClass(), GetCharacterLevel());
+		GrantClassSharedGameplayAbilitiesOnStartup(GetCharacterLevel());
 		
 		// Temporary init to be replaced by Gameplay Effect initialization.
 		XAS->InitHealth(50.0f);
@@ -147,23 +148,20 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 		PS->SetHasGrantedStartupData(true);
 	}
 
-	/*
 	// RESPAWN: The Player State already has abilities, tags, and secondary stat layers.
 	else
 	{
-		/*
 		// We ONLY need to re-apply the Vital Attributes to refill Health and Mana back to their default Max values.
 		AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
 		if (GameState && GameState->CharacterClassInfo)
 		{
-			TSubclassOf<UGameplayEffect> VitalAttributes = GameState->CharacterClassInfo->GetCharacterClassDefaultInfo(CharacterClass).VitalAttributes;
+			TSubclassOf<UGameplayEffect> VitalAttributes = GameState->CharacterClassInfo->GetCharacterClassDefaultInfo(GetCharacterClass()).VitalAttributes;
 			if (VitalAttributes)
 			{
 				ApplyGameplayEffectToSelf(GetAbilitySystemComponent(), VitalAttributes, this, this, this, GetCharacterLevel());
 			}
 		}
 	}
-	*/
 }
 
 void AX_Character_Player::InitAbilitySystemClientSide()
@@ -203,7 +201,7 @@ void AX_Character_Player::InitAbilitySystemClientSide()
 	// Simulated proxies don't need a HUD.
 	if (GetLocalRole() == ROLE_SimulatedProxy)
 	{
-		// Mark as true so the function can successfully return and kill the timer.
+		// Mark as true so the function can successfully return.
 		bHUDInitialized = true; 
 		return;
 	}

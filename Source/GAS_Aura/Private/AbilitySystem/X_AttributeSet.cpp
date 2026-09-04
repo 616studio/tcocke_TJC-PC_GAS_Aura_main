@@ -95,7 +95,7 @@ void UX_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 			// Message Tag
 			if (UX_AbilitySystemLibrary::IsBlockedHit(EffectProperties.EffectContextHandle))
 			{
-				MessageTag = XGameplayTags::UI_Message_Combat_Blocked; 
+				MessageTag = X_GameplayTags::UI_Message_Combat_Blocked; 
 			}
 			else if (UX_AbilitySystemLibrary::IsCriticalHit(EffectProperties.EffectContextHandle))
 			{

@@ -69,34 +69,61 @@ public:
 	
 	/**
 	* <summary>
-	* <c>IX_CharacterInterface</c> implementation.  Returns the CharacterLevel for derived classes.
+	* <c>IX_CharacterInterface</c> implementation.  Returns the Character's Level for derived classes.
 	* </summary>
 	* <remarks>
 	* <b>ARCHITECTURE NOTES:</b>
 	* <list type="bullet">
-	* <item><description><b>Players:</b> Derived class <c>X_Character_Player</c> returns the CharacterLevel declared and managed in <c>X_PlayerState</c>.</description></item>
-	* <item><description><b>NPCs:</b> Derived class <c>X_Character_NPC</c> returns the CharacterLevel declared and managed in <c>X_Character_NPC</c>.</description></item>
+	* <item><description><b>Players:</b> Derived class <c>X_Character_Player</c> returns the Character's Level declared and managed in <c>X_PlayerState</c>.</description></item>
+	* <item><description><b>NPCs:</b> Derived class <c>X_Character_NPC</c> returns the Character's Level declared and managed in <c>X_Character_NPC</c>.</description></item>
 	* </list>
 	* </remarks>
 	*/
-	virtual int32 GetCharacterLevel() const override;
+	virtual int32 GetCharacterLevel() const override { return 1; };
+
+	/**
+	 * <summary>
+	 * <c>IX_CharacterInterface</c> implementation.  Sets the Character's Level for derived classes.
+	 * </summary>	 
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Players:</b> Derived class <c>X_Character_Player</c> sets the Character's Level declared and managed in <c>X_PlayerState</c>.</description></item>
+	 * <item><description><b>NPCs:</b> Derived class <c>X_Character_NPC</c> sets the Character's Level declared and managed in <c>X_Character_NPC</c>.</description></item>
+	 * </list>
+	 * </remarks>
+	 */
+	virtual void SetCharacterLevel(const int32 NewLevel) override;
 	
 	/**
 	 * <summary>
-	 * Returns the Character's class.
+	 * <c>IX_CharacterInterface</c> implementation.  Returns the Character's Class for derived classes.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Players:</b> Derived class <c>X_Character_Player</c> returns the Character's Class declared and managed in <c>X_PlayerState</c>.</description></item>
+	 * <item><description><b>NPCs:</b> Derived class <c>X_Character_NPC</c> returns the Character's Class declared and managed in <c>X_Character_NPC</c>.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
-	virtual ECharacterClassType GetCharacterClass() { return CharacterClass; }
+	virtual ECharacterClass GetCharacterClass() const override { return ECharacterClass::Unassigned; }
+	
+	/**
+	 * <summary>
+	 * <c>IX_CharacterInterface</c> implementation.  Sets the Character's Class for derived classes.
+	 * </summary>	 
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Players:</b> Derived class <c>X_Character_Player</c> sets the Character's Class declared and managed in <c>X_PlayerState</c>.</description></item>
+	 * <item><description><b>NPCs:</b> Derived class <c>X_Character_NPC</c> sets the Character's Class declared and managed in <c>X_Character_NPC</c>.</description></item>
+	 * </list>
+	 * </remarks>
+	 */
+	virtual void SetCharacterClass(const ECharacterClass NewClass) override;
 	
 protected:
-	
-	/**
-	 * <summary>
-	 * The Character's class.
-	 * </summary>
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|GAS|Character Class")
-	ECharacterClassType CharacterClass = ECharacterClassType::Warrior;
 	
 	/**
 	 * <summary>
@@ -105,70 +132,73 @@ protected:
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
-	 * <item><description>Called from <c>PossessedBy</c> in both <c>X_Character_Player</c> and <c>X_Character_NPC</c>.</description></item>
-	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game Mode (<c>BP_GameMode</c>).</description></item>
+	 * <item><description><b>Server-Side Only:</b> Called from <c>PossessedBy</c> in both <c>X_Character_Player</c> and <c>X_Character_NPC</c>.</description></item>
+	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game State (<c>BP_GameState</c>).</description></item>
 	 * </list>
 	 * </remarks>
-	 * <param name="SourceObject">[<c>const UObject*</c>]: The object that owns the effect.</param>
-	 * <param name="InInstigator">[<c>AActor*</c>]: The actor that instigated the effect.</param>
-	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical actor that caused the effect.</param>
-	 * <param name="InCharacterLevel">[<c>int32</c>]: The level used to scale the Attributes.</param>
+	 * <param name="InSourceObject">[<c>UObject*</c>]: The Object that owns the effect.</param>
+	 * <param name="InInstigator">[<c>AActor*</c>]: The physical Actor that instigated the effect.</param>
+	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical Actor that caused the effect.</param>
+	 * <param name="InCharacterClass">[<c>ECharacterClass</c>]: The Character's current Class.</param>
+	 * <param name="InCharacterLevel">[<c>int32</c>]: The Character's current Level.</param>
 	 */
-	virtual void InitializeAttributes(UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, int32 InCharacterLevel);
+	virtual void InitializeAttributes(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, const ECharacterClass InCharacterClass, const int32 InCharacterLevel);
 	
 		/**
 	 * <summary>
-	 * Grants the assigned default Gameplay Abilities to the Character based on their <c>CharacterClass</c>.
+	 * Grants the assigned default Gameplay Abilities to the Character based on their Character's Class.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
-	 * <item><description>Called from <c>PossessedBy</c> in both <c>X_Character_Player</c> and <c>X_Character_NPC</c>.</description></item>
+	 * <item><description><b>Server-Side Only:</b> Called from <c>PossessedBy</c> in both <c>X_Character_Player</c> and <c>X_Character_NPC</c>.</description></item>
 	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game Mode.</description></item>
 	 * </list>
 	 * </remarks>
-	 * <param name="InCharacterLevel">[<c>int32</c>]: The level to grant the abilities at.</param>
+	 * <param name="InCharacterLevel">[<c>cont int32</c>]: The Level to grant the Gameplay Abilities at based on the Character's current Level.</param>
+	 * <param name="InCharacterClass">[<c>const ECharacterClass</c>]: The Character's current Class used to query <c>DA_CharacterClassInfo</c>.</param>
 	 */
-	void GrantClassDefaultGameplayAbilitiesOnStartup(int32 InCharacterLevel);
+	void GrantClassDefaultGameplayAbilitiesOnStartup(const ECharacterClass InCharacterClass, const int32 InCharacterLevel);
 	
 	/**
 	 * <summary>
-	 * Grants the assigned shared Gameplay Abilities to the Character common to each <c>ECharacterClassType</c>.
+	 * Grants the assigned shared Gameplay Abilities to the Character common to each <c>ECharacterClass</c>.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
-	 * <item><description>Called from <c>PossessedBy</c> in both <c>X_Character_Player</c> and <c>X_Character_NPC</c>.</description></item>
+	 * <item><description><b>Server-Side Only:</b> Called from <c>PossessedBy</c> in both <c>X_Character_Player</c> and <c>X_Character_NPC</c>.</description></item>
 	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game Mode.</description></item>
 	 * </list>
 	 * </remarks>
-	 * <param name="InCharacterLevel">[<c>int32</c>]: The level to grant the abilities at.</param>
+	 * <param name="InCharacterLevel">[<c>int32</c>]: The Level to grant the abilities at based on the Character's current Level.</param>
 	 */
 	void GrantClassSharedGameplayAbilitiesOnStartup(int32 InCharacterLevel);
 
 	/**
 	 * <summary>
-	 * Grants default Gameplay Tags to the Character based on their <c>CharacterClass</c>.
+	 * Grants default Gameplay Tags to the Character based on the Character's Class.
 	 * </summary>
 	 * <remarks>
 	 * </remarks>
-	 * <param name="SourceObject">[<c>const UObject*</c>]: The object that owns the effect.</param>
-	 * <param name="InInstigator">[<c>AActor*</c>]: The actor that instigated the effect.</param>
-	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical actor that caused the effect.</param>
-	 * <param name="InCharacterLevel">[<c>int32</c>]: The level used to scale the Attributes.</param> 
+	 * <param name="InSourceObject">[<c>UObject*</c>]: The Object that owns the effect.</param>
+	 * <param name="InInstigator">[<c>AActor*</c>]: The physical Actor that instigated the effect.</param>
+	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical Actor that caused the effect.</param>
+	 * <param name="InCharacterClass">[<c>ECharacterClass</c>]: The Character's current Class.</param>
+	 * <param name="InCharacterLevel">[<c>const int32</c>]: The Level used to scale the Attributes based on the Character's current Level.</param> 
 	 */
-	virtual void InitializeDefaultGameplayTags(UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, int32 InCharacterLevel);
+	virtual void InitializeDefaultGameplayTags(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, ECharacterClass InCharacterClass, const int32 InCharacterLevel);
 	
 	/**
 	 * <summary>
-	 * Helper function to initialize all Attributes for a Character by applying them as Gameplay Effects to the ASC of the Character itself.
+	 * Helper function available to all derived classes used to apply Gameplay Effects to the ASC of the Character itself.
 	 * </summary>
 	 * <param name="ASC">[<c>UAbilitySystemComponent*</c>]: The Target ASC.</param>
 	 * <param name="GameplayEffect">[<c>TSubclassOf</c>(<c>UGameplayEffect</c>)]: The specific Gameplay Effect class to apply.</param>
-	 * <param name="SourceObject">[<c>const UObject*</c>]: The Object applying the effect.</param>
-	 * <param name="InInstigator">[<c>AActor*</c>]: The actor that instigated the effect.</param>
-	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical actor that caused the effect.</param>
-	 * <param name="InCharacterLevel">[<c>int32</c>]: The level of the Character used to scale the effect.</param>
+	 * <param name="SourceObject">[<c>UObject*</c>]: The Object applying the effect.</param>
+	 * <param name="InInstigator">[<c>AActor*</c>]: The physical Actor that instigated the effect.</param>
+	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical Actor that caused the effect.</param>
+	 * <param name="InCharacterLevel">[<c>int32</c>]: The Level of the Character used to scale the effect.</param>
 	 */
 	void ApplyGameplayEffectToSelf(UAbilitySystemComponent* ASC, TSubclassOf<UGameplayEffect> GameplayEffect, const UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, int32 InCharacterLevel) const;
 	

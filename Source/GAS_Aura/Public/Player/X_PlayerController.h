@@ -17,7 +17,7 @@ class UInputMappingContext;
 
 /**
  * <summary>
- * Multicast delegate broadcast on the local client immediately after <c>ClientSetHUD</c> instantiates the HUD.
+ * Used to broadcast to the local client immediately after <c>ClientSetHUD</c> instantiates the HUD.
  * </summary>
  * <remarks>
  * <b>ARCHITECTURE NOTES:</b>

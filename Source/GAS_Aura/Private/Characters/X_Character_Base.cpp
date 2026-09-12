@@ -4,11 +4,10 @@
 #include "GameplayTagContainer.h"
 #include "AbilitySystem/X_AbilitySystemComponent.h"
 #include "AbilitySystem/Abilities/X_GameplayAbility_Base.h"
-#include "Characters/X_CharacterClassInfo.h"
+#include "DataAssets/X_CharacterClassInfo.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameState/X_GameState_Base.h"
 #include "Kismet/GameplayStatics.h"
-#include "Player/X_PlayerController.h"
 
 #pragma region Unreal Defaults
 
@@ -63,7 +62,11 @@ void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* In
 	// Retrieve CharacterClassInfo from GameState.
 	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
 	const AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
-	if (!GameState) return;
+	if (!ensureMsgf(IsValid(GameState), TEXT("Actor: %s - No valid (GameState) found.  Function: %hs"),
+	               *GetName(), __FUNCTION__))
+	{
+		return;
+	}
 	
 	UX_CharacterClassInfo* ClassInfo = GameState->CharacterClassInfo;
 	if (!ensureMsgf(IsValid(ClassInfo), TEXT("Actor: %s - Missing data for Editor assigned variable (%s).  Function: %hs"),
@@ -73,8 +76,17 @@ void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* In
 	{
 		return;
 	}
+	
+	const FX_CharacterClassDefaultInfo* ClassDefaultInfo = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass);
+	if (!ensureMsgf(ClassDefaultInfo, TEXT("Actor: %s - Missing CharacterClassInfo entry for CharacterClass: %s. Function: %hs"),
+				*GetName(),
+				*UEnum::GetValueAsString(InCharacterClass),
+				__FUNCTION__))
+	{
+		return;
+	}
 
-	const TSubclassOf<UGameplayEffect> PrimaryAttributes = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).PrimaryAttributes;
+	const TSubclassOf<UGameplayEffect> PrimaryAttributes = ClassDefaultInfo->PrimaryAttributes;
 	if (!ensureMsgf(PrimaryAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (PrimaryAttributes) for CharacterClass:  %s.  Function: %hs"),
 	               *GetName(),
 	               *UEnum::GetValueAsString(InCharacterClass),
@@ -83,7 +95,7 @@ void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* In
 		return;	
 	}
 
-	const TSubclassOf<UGameplayEffect> SecondaryAttributes = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).SecondaryAttributes;
+	const TSubclassOf<UGameplayEffect> SecondaryAttributes = ClassDefaultInfo->SecondaryAttributes;
 	if (!ensureMsgf(SecondaryAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (SecondaryAttributes) for CharacterClass:  %s.  Function: %hs"),
 				   *GetName(),
 				   *UEnum::GetValueAsString(InCharacterClass),
@@ -92,7 +104,7 @@ void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* In
 		return;	
 	}
 
-	const TSubclassOf<UGameplayEffect> VitalAttributes = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).VitalAttributes;
+	const TSubclassOf<UGameplayEffect> VitalAttributes = ClassDefaultInfo->VitalAttributes;
 	if (!ensureMsgf(VitalAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (VitalAttributes) for CharacterClass:  %s.  Function: %hs"),
 				   *GetName(),
 				   *UEnum::GetValueAsString(InCharacterClass),
@@ -101,7 +113,7 @@ void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* In
 		return;	
 	}
 
-	const TSubclassOf<UGameplayEffect> ResistanceAttributes = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).ResistanceAttributes;
+	const TSubclassOf<UGameplayEffect> ResistanceAttributes = ClassDefaultInfo->ResistanceAttributes;
 	if (!ensureMsgf(ResistanceAttributes, TEXT("Actor: %s - Missing data for Editor assigned variable (ResistanceAttributes) for CharacterClass:  %s.  Function: %hs"),
 				   *GetName(),
 				   *UEnum::GetValueAsString(InCharacterClass),
@@ -137,7 +149,11 @@ void AX_Character_Base::InitializeDefaultGameplayTags(UObject* InSourceObject, A
 	// Retrieve CharacterClassInfo from GameState.
 	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
 	const AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
-	if (!GameState) return;
+	if (!ensureMsgf(IsValid(GameState), TEXT("Actor: %s - No valid (GameState) found.  Function: %hs"),
+	               *GetName(), __FUNCTION__))
+	{
+		return;
+	}
 	
 	UX_CharacterClassInfo* ClassInfo = GameState->CharacterClassInfo;
 	if (!ensureMsgf(IsValid(ClassInfo), TEXT("Actor: %s - Missing data for Editor assigned variable (%s).  Function: %hs"),
@@ -147,8 +163,17 @@ void AX_Character_Base::InitializeDefaultGameplayTags(UObject* InSourceObject, A
 	{
 		return;
 	}
+	
+	const FX_CharacterClassDefaultInfo* ClassDefaultInfo = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass);
+	if (!ensureMsgf(ClassDefaultInfo, TEXT("Actor: %s - Missing CharacterClassInfo entry for CharacterClass: %s. Function: %hs"),
+				*GetName(),
+				*UEnum::GetValueAsString(InCharacterClass),
+				__FUNCTION__))
+	{
+		return;
+	}
 
-	const TSubclassOf<UGameplayEffect> DefaultGameplayTags = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass).DefaultGameplayTags;
+	const TSubclassOf<UGameplayEffect> DefaultGameplayTags = ClassDefaultInfo->DefaultGameplayTags;
 	if (!ensureMsgf(DefaultGameplayTags, TEXT("Actor: %s - Missing data for Editor assigned variable (DefaultGameplayTags) for Character Class:  %s.  Function: %hs"),
 				   *GetName(),
 				   *UEnum::GetValueAsString(InCharacterClass),
@@ -177,7 +202,11 @@ void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const EChara
 	// Retrieve CharacterClassInfo from GameState.
 	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
 	AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
-	if (!GameState) return;
+	if (!ensureMsgf(IsValid(GameState), TEXT("Actor: %s - No valid (GameState) found.  Function: %hs"),
+	               *GetName(), __FUNCTION__))
+	{
+		return;
+	}
 	
 	UX_CharacterClassInfo* ClassInfo = GameState->CharacterClassInfo;
 	if (!ensureMsgf(IsValid(ClassInfo), TEXT("Actor: %s - Missing data for Editor assigned variable (%s).  Function: %hs"),
@@ -188,11 +217,18 @@ void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const EChara
 		return;
 	}
 	
-	const FX_CharacterClassDefaultInfo& ClassDefaultInfo = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass);
+	const FX_CharacterClassDefaultInfo* ClassDefaultInfo = ClassInfo->GetCharacterClassDefaultInfo(InCharacterClass);
+	if (!ensureMsgf(ClassDefaultInfo, TEXT("Actor: %s - Missing CharacterClassInfo entry for CharacterClass: %s. Function: %hs"),
+				*GetName(),
+				*UEnum::GetValueAsString(InCharacterClass),
+				__FUNCTION__))
+	{
+		return;
+	}
 	
-	if (!ClassDefaultInfo.bShouldHaveDefaultAbilities) return;
+	if (!ClassDefaultInfo->bShouldHaveDefaultAbilities) return;
 
-	if (!ensureMsgf(!ClassDefaultInfo.DefaultAbilities.IsEmpty(), TEXT("Actor: %s - %s has no abilities assigned.  Function: %hs"),
+	if (!ensureMsgf(!ClassDefaultInfo->DefaultAbilities.IsEmpty(), TEXT("Actor: %s - %s has no abilities assigned.  Function: %hs"),
 	               *GetName(),
 	               *UEnum::GetValueAsString(InCharacterClass),
 	               __FUNCTION__))
@@ -200,9 +236,9 @@ void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const EChara
 		return;
 	}
 
-	for (int32 i = 0; i < ClassDefaultInfo.DefaultAbilities.Num(); ++i)
+	for (int32 i = 0; i < ClassDefaultInfo->DefaultAbilities.Num(); ++i)
 	{
-		const TSubclassOf<UGameplayAbility> StartupAbility = ClassDefaultInfo.DefaultAbilities[i];
+		const TSubclassOf<UGameplayAbility> StartupAbility = ClassDefaultInfo->DefaultAbilities[i];
 
 		// Check if an empty array element was accidentally added.
 		if (!StartupAbility)
@@ -345,24 +381,6 @@ void AX_Character_Base::InitWeapon()
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 }
-
-#pragma region UI
-
-void AX_Character_Base::MulticastRPC_BroadcastDamage_Implementation(const float DamageAmount, const FVector TargetLocation, AActor* InstigatorActor, const FGameplayTag MessageTag, const FGameplayTag AbilityTag)
-{
-	// We grab the local machine's specific Player Controller (Index 0 is ALWAYS the local player).
-	if (AX_PlayerController* LocalPC = Cast<AX_PlayerController>(UGameplayStatics::GetPlayerController(this, 0)))
-	{
-		// Prevents headless Dedicated Servers from trying to spawn UI widgets on screens that don't exist.
-		if (LocalPC->IsLocalController())
-		{
-			// Tell the local PC to spawn the UI widget for itself.
-			LocalPC->ShowFloatingDamageText_Local(DamageAmount, TargetLocation, InstigatorActor, MessageTag, AbilityTag);
-		}
-	}
-}
-
-#pragma endregion UI
 
 #pragma endregion Weapon
 

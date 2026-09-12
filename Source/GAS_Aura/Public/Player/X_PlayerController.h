@@ -23,12 +23,11 @@ class UInputMappingContext;
  * <b>ARCHITECTURE NOTES:</b>
  * <list type="bullet">
  * <item><description>Enables zero-tick, event-driven UI initialization to resolve client replication timing race conditions, where the PlayerState, PlayerController, and HUD replicate down to the client on completely different frames.</description></item>
- * <item><description><b>Documentation:</b>  <a href="https://summer-paradox-663.notion.site/HUD-Initialization-Process-3cbe565e9a8e8017b2a1dad85f6baee1?source=copy_link">HUD Initialization Process</a></description></item>
  * </list>
  * </remarks>
  * <param name="HUDInstance">[<c>AX_HUD*</c>]: Valid pointer to the newly instantiated local HUD actor.</param>
  */
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnHUDInitialized, AX_HUD* /* HUDInstance */);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHUDInitialized, AX_HUD* /* HUD instance */);
 
 /**
  * <summary>

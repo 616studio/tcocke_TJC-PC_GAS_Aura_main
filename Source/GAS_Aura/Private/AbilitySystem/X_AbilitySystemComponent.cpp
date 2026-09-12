@@ -1,10 +1,7 @@
 ﻿// Copyright © 2026 616 Studio LLC. All Rights Reserved. ([https://616.studio](https://616.studio))
 
-
 #include "AbilitySystem/X_AbilitySystemComponent.h"
-
 #include "GAS_Aura/UtilityClasses/X_GameplayTags.h"
-
 
 void UX_AbilitySystemComponent::BindToGameplayEffectDelegate()
 {

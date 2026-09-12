@@ -4,9 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "AbilitySystem/X_GAS_DataTypes.h"
+#include "GAS_Aura/UtilityClasses/X_CustomDataTypes.h"
 #include "X_CharacterClassInfo.generated.h"
-
 
 // Forward declarations
 class UGameplayEffect;
@@ -65,7 +64,7 @@ public:
 	 * </summary>
 	 * 
 	 */	
-	FX_CharacterClassDefaultInfo& GetCharacterClassDefaultInfo(ECharacterClass CharacterClass);
+	const FX_CharacterClassDefaultInfo* GetCharacterClassDefaultInfo(ECharacterClass CharacterClass) const;
 	
 	/**
 	 * <summary>

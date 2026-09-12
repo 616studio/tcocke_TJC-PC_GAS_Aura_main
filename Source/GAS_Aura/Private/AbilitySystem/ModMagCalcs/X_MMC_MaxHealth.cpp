@@ -44,6 +44,7 @@ float UX_MMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEff
 	
 	// Fallback logic: Try the explicitly assigned Source Object first. 
 	// If it fails (or is null), try the broader Instigator of the effect.
+	// If that fails (or is null), we default to a value of 1.
 	if (IX_CharacterInterface* SourceInterface = Cast<IX_CharacterInterface>(SourceObject))
 	{
 		CharacterLevel = SourceInterface->GetCharacterLevel();

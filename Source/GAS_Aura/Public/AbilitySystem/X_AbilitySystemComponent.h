@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "UI/X_UI_Delegates.h"
+#include "GAS_Aura/UtilityClasses/X_CustomDelegates.h"
 #include "X_AbilitySystemComponent.generated.h"
 
 /**

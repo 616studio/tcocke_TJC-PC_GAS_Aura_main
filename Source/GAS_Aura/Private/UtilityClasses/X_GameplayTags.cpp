@@ -1,6 +1,6 @@
 // Copyright © 2026 616 Studio LLC. All Rights Reserved. (https://616.studio)
 
-#include "X_GameplayTags.h"
+#include "GAS_Aura/UtilityClasses/X_GameplayTags.h"
 
 namespace XGameplayTags
 {
@@ -35,12 +35,12 @@ namespace XGameplayTags
 	// Resistance Attributes
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance, "Attributes.Resistance", "Resistance Attributes container.");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Fire, "Attributes.Resistance.Fire", "Resistance to Fire damage.  Scales with Resilience and Intelligence by a factor of 0.25 (1 point of Fire Resistance for every 4 points of Resilience plus 1 point of Fire Resistance for every 4 points of Intelligence).");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Ice, "Attributes.Resistance.Ice", "Resistance to Ice damage.  Scales with Resilience by a factor of X () and Intelligence by a factor of Y ().");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Shock, "Attributes.Resistance.Shock", "Resistance to Shock damage.  Scales with Resilience by a factor of X () and Intelligence by a factor of Y ().");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Poison, "Attributes.Resistance.Poison", "Resistance to Poison damage.  Scales with Resilience by a factor of X () and Intelligence by a factor of Y ().");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Slashing, "Attributes.Resistance.Slashing", "Resistance to Slashing damage.  Scales with Resilience by a factor of X () and Strength by a factor of Y ().");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Crushing, "Attributes.Resistance.Crushing", "Resistance to Crushing damage.  Scales with Resilience by a factor of X () and Strength by a factor of Y ().");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Piercing, "Attributes.Resistance.Piercing", "Resistance to Piercing damage.  Scales with Resilience by a factor of X () and Strength by a factor of Y ().");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Ice, "Attributes.Resistance.Ice", "Resistance to Ice damage.  Scales with Resilience and Intelligence by a factor of 0.25 (1 point of Ice Resistance for every 4 points of Resilience plus 1 point of Ice Resistance for every 4 points of Intelligence).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Shock, "Attributes.Resistance.Shock", "Resistance to Shock damage.  Scales with Resilience and Intelligence by a factor of 0.25 (1 point of Shock Resistance for every 4 points of Resilience plus 1 point of Shock Resistance for every 4 points of Intelligence).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Poison, "Attributes.Resistance.Poison", "Resistance to Poison damage.  Scales with Resilience and Intelligence by a factor of 0.25 (1 point of Poison Resistance for every 4 points of Resilience plus 1 point of Poison Resistance for every 4 points of Intelligence).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Slashing, "Attributes.Resistance.Slashing", "Resistance to Slashing damage.  Scales with Resilience and Strength by a factor of 0.25 (1 point of Slashing Resistance for every 4 points of Resilience plus 1 point of Slashing Resistance for every 4 points of Strength).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Crushing, "Attributes.Resistance.Crushing", "Resistance to Crushing damage.  Scales with Resilience and Strength by a factor of 0.25 (1 point of Crushing Resistance for every 4 points of Resilience plus 1 point of Crushing Resistance for every 4 points of Strength).");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Resistance_Piercing, "Attributes.Resistance.Piercing", "Resistance to Piercing damage.  Scales with Resilience and Strength by a factor of 0.25 (1 point of Piercing Resistance for every 4 points of Resilience plus 1 point of Piercing Resistance for every 4 points of Strength).");
 #pragma endregion Attributes
 
 #pragma region Character

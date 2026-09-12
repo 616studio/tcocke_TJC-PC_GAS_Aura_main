@@ -4,24 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "X_UI_Controller_Base.h"
-#include "UI/X_UI_Delegates.h"
-#include "X_UI_Controller_HUD.generated.h"
+#include "GAS_Aura/UtilityClasses/X_CustomDelegates.h"
+#include "X_UI_Controller_ScreenMessage_ItemPickup.generated.h"
 
-class UX_AttributeSet;
 class UX_AbilitySystemComponent;
 /**
  * <summary>
- * The Controller designed specifically for use with the HUD's <c>View_HUD</c>.
+ * The Controller designed specifically for use with <c>WBP_View_ScreenMessage_ItemPickup</c> and managed by <c>WBP_View_HUD</c>.
  * </summary>
  * <remarks>
- * <b>ARCHITECTURE RULES:</b>
+ * <b>ARCHITECTURE NOTES:</b>
  * <list type="bullet">
- * <item><description><b>BlueprintType:</b> Allows casting to this specific Controller type inside Blueprints.</description></item>
+ * <item><description>Subclassed in Blueprint as <c>BP_UI_Controller_ScreenMessage_ItemPickup</c> to allow designers to set class variables in the Editor.</description></item>
  * </list>
  * </remarks>
  */
 UCLASS(BlueprintType)
-class GAS_AURA_API UX_UI_Controller_HUD : public UX_UI_Controller_Base
+class GAS_AURA_API UX_UI_Controller_ScreenMessage_ItemPickup : public UX_UI_Controller_Base
 {
 	GENERATED_BODY()
 	
@@ -29,75 +28,17 @@ public:
 	
 	/**
 	 * <summary>
-	 * Overriden derived class implementation used to perform a manual broadcast using any of the Model values assigned to this Controller.
+	 * Overriden derived class implementation used to specify the callbacks this Controller needs to bind to any of the Model delegates.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
-	 * <item><description>Extracts the Vital Attribute values (and their associated Secondary Attribute values) from the downcast Model <c>AS</c> and broadcasts them via their respective delegate instances.</description></item>
-	 * </list>
-	 * </remarks>
-	 */
-	virtual void BroadcastCurrentModelValues() override;
-
-	/**
-	 * <summary>
-	 * Overriden derived class implementation used to specify the callbacks it wants to bind to any of the Model delegates.
-	 * </summary>
-	 * <remarks>
-	 * <b>ARCHITECTURE NOTES:</b>
-	 * <list type="bullet">
-	 * <item><description>Validates the downcast <c>UX_AttributeSet</c> and <c>UX_AbilitySystemComponent</c> pointers.</description></item>
-	 * <item><description>Routes the validated pointers to the <c>BindToAttributeDelegate()</c> and <c>BindToGameplayEffectAssetTagsDelegate()</c> helper functions.</description></item>
+	 * <item><description>Calls helper function <c>BindToGameplayEffectAssetTagsDelegate</c>.</description></item>
 	 * <item><description>Utilizes the <c>bCallbacksBound</c> flag to prevent duplicate delegate bindings if initialized multiple times.</description></item>
 	 * </list>
 	 * </remarks>
 	 */
 	virtual void BindCallbacksToModelDelegates() override;
-	
-	protected:
-	
-private:
-
-#pragma region Attribute Value Delegate Functionality
-
-public:
-	
-	// Attribute delegate instances.
-	
-	UPROPERTY(BlueprintAssignable, Category = "***CUSTOM|UI")
-	FX_UIAttributeDisplayCurrentMaxPayloadSignature OnHealthChanged;
-
-	UPROPERTY(BlueprintAssignable, Category = "***CUSTOM|UI")
-	FX_UIAttributeDisplayCurrentMaxPayloadSignature OnManaChanged;
-	
-protected:
-	
-private:
-	
-	/**
-	 * <summary>
-	 * Helper function to consolidate the Attribute Value delegate binding logic.
-	 * </summary>
-	 * <remarks>
-	 * <b>ARCHITECTURE NOTES:</b>
-	 * <list type="bullet">
-	 * <item><description>Binds this Controller to the downcast Model ASC's <c>GetGameplayAttributeValueChangeDelegate</c> for each Attribute using <c>AddWeakLambda</c>.</description></item>
-	 * <item><description><c>FOnGameplayAttributeValueChange</c> is the internal GAS notification that fires whenever the Base or Current Value of an Attribute is modified.</description></item>
-	 * <item><description>When a change is detected, the <c>NewValue</c> is extracted from the <c>FOnAttributeChangeData</c> payload.</description></item>
-	 * <item><description>The CurrentValue and MaxValue for Health and Mana are assigned to an instance of our custom delegate (<c>FX_UIAttributeDisplayCurrentMaxPayloadSignature</c>) used to broadcast their values to its listeners.</description></item>
-	 * </list>
-	 * </remarks>
-	 * <param name="XAS">[<c>UX_AttributeSet*</c>]: The downcast Model AS pointer that provides the Attribute definitions.</param>
-	 * <param name="XASC">[<c>UX_AbilitySystemComponent*</c>]: The downcast Model ASC pointer used to establish the delegate bindings.</param>
-	 */
-	void BindToAttributeDelegates(UX_AttributeSet* XAS, UX_AbilitySystemComponent* XASC);
-	
-#pragma endregion Attribute Value Delegate Functionality
-
-#pragma region Screen Message Row Delegate Functionality
-
-public:
 	
 	/**
 	 * <summary>
@@ -106,9 +47,9 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category = "***CUSTOM|UI")
 	FX_ScreenMessageItemPickupSignature OnScreenMessageItemPickup;
-
+	
 protected:
-
+	
 	/**
 	 * <summary>
 	 * The Data Table asset containing <c>FScreenMessageItemPickupRowStructure</c> entries.
@@ -136,7 +77,7 @@ protected:
 	 * </remarks>
 	 */
 	void PreloadScreenMessageDataTableAssets();
-
+	
 	/**
 	 * <summary>
 	 * Asynchronous completion callback executed when <c>UAssetManager</c> finishes streaming the soft asset paths requested by <c>PreloadScreenMessageDataTableAssets</c>.
@@ -150,7 +91,7 @@ protected:
 	 * <param name="PreloadedPaths">[<c>TArray of FSoftObjectPath</c>]: The collection of soft object paths that were asynchronously loaded into memory.</param>
 	 */
 	void OnScreenMessageAssetsPreloaded(TArray<FSoftObjectPath> PreloadedPaths);
-
+	
 	/** 
 	 * <summary>
 	 * Holds hard UPROPERTY references to preloaded UI assets to prevent GC collection during gameplay.
@@ -176,7 +117,4 @@ private:
 	 * <param name="XASC">[<c>UX_AbilitySystemComponent*</c>]: The downcast Model ASC pointer used to establish the delegate binding.</param>
 	 */
 	void BindToGameplayEffectAssetTagsDelegate(UX_AbilitySystemComponent* XASC);
-	
-#pragma endregion Screen Message Row Delegate Functionality
-
 };

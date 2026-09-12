@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "AbilitySystem/X_GAS_DataTypes.h"
+#include "GAS_Aura/UtilityClasses/X_CustomDataTypes.h"
 #include "GameFramework/PlayerState.h"
 #include "X_PlayerState.generated.h"
 
@@ -53,14 +53,8 @@ public:
 	
 	/**
 	 * <summary>
-	 * Retrieves the ASC bound to this class for the Player.
+	 * <c>IAbilitySystemInterface</c> implementation.  Retrieves the ASC bound to this class for the Player.
 	 * </summary>
-	 * <remarks>
-	 * <b>ARCHITECTURE NOTES:</b>
-	 * <list type="bullet">
-	 * <item><description>Satisfies <c>IAbilitySystemInterface</c> compliance.</description></item>
-	 * </list>
-	 * </remarks>
 	 */
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
@@ -133,7 +127,11 @@ public:
 	
 	void SetPlayerCharacterLevel(const int32 NewLevel) { PlayerCharacterLevel = NewLevel; }
 	
+	int32 GetPlayerCharacterLevel() const { return PlayerCharacterLevel; }
+	
 	void SetPlayerCharacterClass(const ECharacterClass NewClassType) { PlayerCharacterClass = NewClassType; }
+	
+	ECharacterClass GetPlayerCharacterClass() const { return PlayerCharacterClass; }
 			
 protected:
 	/**
@@ -149,7 +147,7 @@ protected:
 	 * </summary>
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|GAS|Character Class")
-	ECharacterClass PlayerCharacterClass = ECharacterClass::Warrior;
+	ECharacterClass PlayerCharacterClass = ECharacterClass::Hero;
 	
 private:
 	

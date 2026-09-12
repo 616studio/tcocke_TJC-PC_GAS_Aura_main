@@ -6,57 +6,8 @@
 #include "GameFramework/PlayerState.h"
 #include "UI/Views/X_UI_View_Base.h"
 #include "UI/Controllers/X_UI_Controller_Base.h"
-#include "UI/Controllers/X_UI_Controller_AttributeMenu.h"
-#include "UI/Controllers/X_UI_Controller_HUD.h"
 
-UX_UI_Controller_HUD* AX_HUD::GetView_HUDController(const FModelsPayload& Models)
-{
-	// Lazy Init: instantiates the Controller from the Editor assigned Blueprint class if it has not yet been cached.
-	if (View_HUDController == nullptr)
-	{
-		if (!ensureMsgf(IsValid(View_HUDControllerClass), TEXT("Actor: %s - Missing Editor assigned variable (%s).  Function: %hs"),
-				   *GetName(),
-				   *GET_MEMBER_NAME_CHECKED(ThisClass, View_HUDControllerClass).ToString(),
-				   __FUNCTION__))
-		{
-			return nullptr;
-		}
-		
-		View_HUDController = NewObject<UX_UI_Controller_HUD>(this, View_HUDControllerClass);		
-	}
-	
-	// NOTE: validation of the Models payload is the responsibility of the Controller, not this class.
-	View_HUDController->AssignModelsToController(Models);
-	View_HUDController->BindCallbacksToModelDelegates();
-	
-	return View_HUDController;
-	
-}
-
-UX_UI_Controller_AttributeMenu* AX_HUD::GetView_AttributeMenuController(const FModelsPayload& Models)
-{
-	// Lazy Init: instantiates the Controller from the Editor assigned Blueprint class if it has not yet been cached.
-	if (View_AttributeMenuController == nullptr)
-	{
-		if (!ensureMsgf(IsValid(View_AttributeMenuControllerClass), TEXT("Actor: %s - Missing Editor assigned variable (%s).  Function: %hs"),
-					   *GetName(),
-					   *GET_MEMBER_NAME_CHECKED(ThisClass, View_AttributeMenuControllerClass).ToString(),
-					   __FUNCTION__))
-		{
-			return nullptr;
-		}
-		
-		View_AttributeMenuController = NewObject<UX_UI_Controller_AttributeMenu>(this, View_AttributeMenuControllerClass);		
-	}
-	
-	// NOTE: validation of the Models payload is the responsibility of the Controller, not this class.
-	View_AttributeMenuController->AssignModelsToController(Models);
-	View_AttributeMenuController->BindCallbacksToModelDelegates();
-	
-	return View_AttributeMenuController;
-}
-
-void AX_HUD::InitView_HUD(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
+void AX_HUD::InitHUD(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
 {
 	// Defers initialization until all Models have fully replicated to the Client.
 	if (!IsValid(PC) || !IsValid(PS) || !IsValid(ASC) || !IsValid(AS))
@@ -65,6 +16,19 @@ void AX_HUD::InitView_HUD(APlayerController* PC, APlayerState* PS, UAbilitySyste
 				*GetName(), 
 				__FUNCTION__);
 		return;
+	}
+	
+	// Store Model context payload locally for lazy Controller instantiation.
+	CurrentModelsPayload = FModelsPayload(PC, PS, ASC, AS);
+	
+	// Cascade updated Models and re-bind delegates for all ALREADY-instantiated controllers (handles Pawn respawns/re-possession).
+	for (const TPair<TSubclassOf<UX_UI_Controller_Base>, TObjectPtr<UX_UI_Controller_Base>>& KVP : ControllerRegistry)
+	{
+		if (UX_UI_Controller_Base* Controller = KVP.Value)
+		{
+			Controller->AssignModelsToController(CurrentModelsPayload);
+			Controller->BindCallbacksToModelDelegates();
+		}
 	}
 	
 	if (!IsValid(View_HUDClass))
@@ -93,30 +57,37 @@ void AX_HUD::InitView_HUD(APlayerController* PC, APlayerState* PS, UAbilitySyste
 		return;
 		
 	}
-
-	// Construct a Model payload to retrieve a fully initialized Controller ready to be assigned to View_HUD.	
-	const FModelsPayload Models(PC, PS, ASC, AS);
-	View_HUDController = GetView_HUDController(Models);
-
-	if (!IsValid(View_HUDController))
+	
+	// Broadcast initialization signal down the View tree (Child sub-widgets pull Controllers via UX_AbilitySystemLibrary).
+	if (View_HUD->Implements<UX_UI_ViewInterface>())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Actor: %s.  No valid (%s) found.  Function: %hs"),
-		       *GetName(),
-		       *GET_MEMBER_NAME_CHECKED(ThisClass, View_HUDController).ToString(),
-		       __FUNCTION__);
-		
-		return;
-		
+		IX_UI_ViewInterface::Execute_PerformInitialization(View_HUD);
 	}
-
-	// Triggers the "ControllerHasBeenAssigned" Blueprint event, allowing the View_HUD to distribute its assigned Controller to any of its embedded child Views.
-	View_HUD->AssignControllerToView(View_HUDController);
-
-	// Broadcast initial Model data to View_HUD to prevent empty UI states.
-	View_HUDController->BroadcastCurrentModelValues();
-					
+	
+	// Render top-level layout container to Viewport.
+	View_HUD->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	if (!View_HUD->IsInViewport())
 	{
 		View_HUD->AddToViewport();
-	}	
+	}
+}
+
+UX_UI_Controller_Base* AX_HUD::GetOrCreateController_Internal(TSubclassOf<UX_UI_Controller_Base> ControllerClass)
+{
+	if (!IsValid(ControllerClass)) return nullptr;
+
+	// Return cached instance if already initialized.
+	if (TObjectPtr<UX_UI_Controller_Base>* ExistingController = ControllerRegistry.Find(ControllerClass))
+	{
+		return *ExistingController;
+	}
+
+	// Instantiate new Blueprint subclass and assign Models.
+	UX_UI_Controller_Base* NewController = NewObject<UX_UI_Controller_Base>(this, ControllerClass);
+	NewController->AssignModelsToController(CurrentModelsPayload);
+	NewController->BindCallbacksToModelDelegates();
+
+	// Cache Controller instance in TMap for Garbage Collection tracking.
+	ControllerRegistry.Add(ControllerClass, NewController);
+	return NewController;
 }

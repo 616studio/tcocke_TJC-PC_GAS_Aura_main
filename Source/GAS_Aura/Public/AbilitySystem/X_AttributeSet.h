@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "AbilitySystem/X_GAS_DataTypes.h"
+#include "GAS_Aura/UtilityClasses/X_CustomDataTypes.h"
 #include "AttributeSet.h"
 #include "X_AttributeSet.generated.h"
 
@@ -106,7 +106,7 @@ public:
     * </list>
     * <b>PRIMARY RESPONSIBILITY:</b>
     * <list type="bullet">
-    * <item><description><b>Registration:</b> tells the Unreal network engine to actively track every Vital, Primary, Secondary, and Resistance Attribute so players can see their own (and others') correct stats.</description></item>
+    * <item><description><b>Registration:</b> tells the Unreal network engine to actively track every Gameplay Attribute so Players can see their own (and others') correct stats.</description></item>
     * </list>
     * <b>IMPORTANT:</b>
     * <list type="bullet">
@@ -124,11 +124,6 @@ public:
 	
 #pragma region Health
 	
-	/**
-	 * <summary>
-	 * The primary Vital Attribute resource pool.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "***CUSTOM|GAS|Attributes|Vital")
 	FGameplayAttributeData Health;
 
@@ -141,11 +136,6 @@ public:
 
 #pragma region Mana
 		
-	/**
-	 * <summary>
-	 * The secondary Vital Attribute resource pool.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "***CUSTOM|GAS|Attributes|Vital")
 	FGameplayAttributeData Mana;
 
@@ -162,11 +152,6 @@ public:
 	
 #pragma region Strength
 	
-	/**
-	 * <summary>
-	 * Increases physical damage.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Strength, Category = "***CUSTOM|GAS|Attributes|Primary")
 	FGameplayAttributeData Strength;
 
@@ -179,11 +164,6 @@ public:
 
 #pragma region Intelligence
 
-	/**
-	 * <summary>
-	 * Increases magical damage.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Intelligence, Category = "***CUSTOM|GAS|Attributes|Primary")
 	FGameplayAttributeData Intelligence;
 
@@ -196,11 +176,6 @@ public:
 
 #pragma region Resilience
 
-	/**
-	 * <summary>
-	 * Increases Armor and Armor Penetration.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Resilience, Category = "***CUSTOM|GAS|Attributes|Primary")
 	FGameplayAttributeData Resilience;
 
@@ -213,11 +188,6 @@ public:
 
 #pragma region Vigor
 
-	/**
-	 * <summary>
-	 * Increases Health.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Vigor, Category = "***CUSTOM|GAS|Attributes|Primary")
 	FGameplayAttributeData Vigor;
 
@@ -234,11 +204,6 @@ public:
 
 #pragma region Armor
 
-	/**
-	 * <summary>
-	 * Reduces damage taken; improves Block Chance.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Armor, Category = "***CUSTOM|GAS|Attributes|Secondary")
 	FGameplayAttributeData Armor;
 
@@ -251,11 +216,6 @@ public:
 
 #pragma region Armor Penetration
 
-	/**
-	 * <summary>
-	 * Ignores percentage of enemy Armor; increases Critical Hit Chance.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ArmorPenetration, Category = "***CUSTOM|GAS|Attributes|Secondary")
 	FGameplayAttributeData ArmorPenetration;
 
@@ -268,11 +228,6 @@ public:
 
 #pragma region Block Chance
 
-	/**
-	 * <summary>
-	 * Chance to cut incoming damage in half.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_BlockChance, Category = "***CUSTOM|GAS|Attributes|Secondary")
 	FGameplayAttributeData BlockChance;
 
@@ -285,11 +240,6 @@ public:
 
 #pragma region Critical Hit Chance
 
-	/**
-	 * <summary>
-	 * Chance to double damage plus critical hit bonus.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CriticalHitChance, Category = "***CUSTOM|GAS|Attributes|Secondary")
 	FGameplayAttributeData CriticalHitChance;
 
@@ -302,11 +252,6 @@ public:
 
 #pragma region Critical Hit Damage
 
-	/**
-	 * <summary>
-	 * Bonus damage added when a critical hit is scored.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CriticalHitDamage, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData CriticalHitDamage;
 
@@ -319,11 +264,6 @@ public:
 	
 #pragma region Critical Hit Resistance
 
-	/**
-	 * <summary>
-	 * Reduces Critical Hit Chance of attacking enemies.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CriticalHitResistance, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData CriticalHitResistance;
 
@@ -336,11 +276,6 @@ public:
 
 #pragma region Health Regeneration
 
-	/**
-	 * <summary>
-	 * Amount of Health regenerated every 1 second.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_HealthRegeneration, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData HealthRegeneration;
 
@@ -353,11 +288,6 @@ public:
 
 #pragma region Mana Regeneration
 
-	/**
-	 * <summary>
-	 * Amount of Mana regenerated every 1 second.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ManaRegeneration, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData ManaRegeneration;
 
@@ -370,11 +300,6 @@ public:
 	
 #pragma region MaxMana
 	
-	/**
-	 * <summary>
-	 * Maximum amount of Mana (secondary Vital resource pool) obtainable.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData MaxMana;
 
@@ -387,11 +312,6 @@ public:
 
 #pragma region MaxHealth
 
-	/**
-	 * <summary>
-	 * Maximum amount of Health (primary Vital resource pool) obtainable.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData MaxHealth;
 
@@ -408,11 +328,6 @@ public:
 	
 #pragma region Fire Resistance
 	
-	/**
-	 * <summary>
-	 * Resistance to damage type of Fire.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_FireResistance, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData FireResistance;
 
@@ -425,11 +340,6 @@ public:
 	
 #pragma region Ice Resistance
 	
-	/**
-	 * <summary>
-	 * Resistance to damage type of Ice.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_IceResistance, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData IceResistance;
 
@@ -442,11 +352,6 @@ public:
 	
 #pragma region Poison Resistance
 	
-	/**
-	 * <summary>
-	 * Resistance to damage type of Poison.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_PoisonResistance, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData PoisonResistance;
 
@@ -459,11 +364,6 @@ public:
 	
 #pragma region Shock Resistance
 	
-	/**
-	 * <summary>
-	 * Resistance to damage type of Shock.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ShockResistance, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData ShockResistance;
 
@@ -476,11 +376,6 @@ public:
 	
 #pragma region Slashing Resistance
 	
-	/**
-	 * <summary>
-	 * Resistance to damage type of Slashing.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_SlashingResistance, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData SlashingResistance;
 
@@ -493,11 +388,6 @@ public:
 	
 #pragma region Crushing Resistance
 	
-	/**
-	 * <summary>
-	 * Resistance to damage type of Crushing.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CrushingResistance, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData CrushingResistance;
 
@@ -510,11 +400,6 @@ public:
 	
 #pragma region Piercing Resistance
 	
-	/**
-	 * <summary>
-	 * Resistance to damage type of Piercing.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_PiercingResistance, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData PiercingResistance;
 
@@ -531,11 +416,6 @@ public:
 	
 #pragma region IncomingDamage
 
-	/**
-	 * <summary>
-	 * Meta Attribute for the total calculation of incoming damage to be subtracted from the Health Attribute.
-	 * </summary>
-	 */
 	UPROPERTY(BlueprintReadOnly, Category = "***CUSTOM|GAS|Attributes")
 	FGameplayAttributeData IncomingDamage;
 	

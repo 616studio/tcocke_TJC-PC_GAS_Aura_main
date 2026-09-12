@@ -14,50 +14,6 @@ class APlayerState;
 
 /**
  * <summary>
- * Struct payload used to transport the Models of the MVC UI architecture (<c>PC</c>, <c>PS</c>, <c>ASC</c>, and <c>AS</c>) to Controllers.
- * </summary>
- * <remarks>
- * <b>ARCHITECTURE NOTES:</b>
- * <list type="bullet">
- * <item><description>Uses base Engine pointers rather than derived classes to avoid hardcoded dependencies.</description></item>
- * <item><description>Any required casting to derived classes is handled internally by the receiving Controller.</description></item>
- * </list>
- * </remarks>
- */
-USTRUCT(BlueprintType)
-struct FModelsPayload
-{
-	GENERATED_BODY()
-
-	FModelsPayload() {}
-	FModelsPayload(
-		APlayerController* InPlayerController,
-		APlayerState* InPlayerState,
-		UAbilitySystemComponent* InAbilitySystemComponent,
-		UAttributeSet* InAttributeSet
-		)
-		:
-		PlayerController(InPlayerController),
-		PlayerState(InPlayerState),
-		AbilitySystemComponent(InAbilitySystemComponent),
-		AttributeSet(InAttributeSet)
-	{}
-
-	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<APlayerController> PlayerController;
-
-	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<APlayerState> PlayerState;
-
-	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-
-	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<UAttributeSet> AttributeSet;
-};
-
-/**
- * <summary>
  * The abstract base Controller in the MVC (Model-View-Controller) UI architecture.
  * </summary>
  * <remarks>
@@ -113,8 +69,6 @@ public:
 	 */
 	virtual void BindCallbacksToModelDelegates();
 	
-	
-	
 	/**
 	 * <summary>
 	 * Allows derived classes to perform a manual broadcast using any of the Model's assigned to this Controller.
@@ -154,7 +108,7 @@ protected:
 	 * Model cached as read-only during <b>[Step 1 - Assign Models]</b>.
 	 * </summary>
 	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "***CUSTOM|UI")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "***CUSTOM|UI")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	/**

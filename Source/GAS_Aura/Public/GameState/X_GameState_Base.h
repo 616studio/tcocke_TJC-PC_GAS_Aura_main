@@ -29,7 +29,7 @@ public:
 	
 	/**
 	 * <summary>
-	 * Data Asset <c>DA_CharacterClassInfo</c> referenced here so it is accessible to Clients for local GAS prediction.
+	 * Data Asset <c>DA_CharacterClassInfo</c> referenced here so it is accessible to both Servers and Clients.
 	 * </summary> 
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Character Class Defaults")

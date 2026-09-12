@@ -8,7 +8,7 @@
 
 /**
  * <summary>
- * Custom calculation class used by Gameplay Effects to dynamically determine the Max Mana Attribute based on Intelligence and Character Level.
+ * Custom calculation class used by Gameplay Effects to dynamically determine the MaxMana Attribute based on Intelligence and Character Level.
  * </summary>
  */
 UCLASS()
@@ -55,7 +55,7 @@ private:
 
 	/**
 	 * <summary>
-	 * The starting baseline value for the calculation.
+	 * The minimum starting MaxMana value before Intelligence and Character Level are factored in.
 	 * </summary>
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Calculations")
@@ -63,16 +63,30 @@ private:
 
 	/**
 	 * <summary>
-	 * The mathematical weight applied to the captured Intelligence Attribute.
+	 * Represents the multiplier (X) for how MaxMana scales with Intelligence.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Multiplier (X) > 1.0:</b> X point(s) of MaxMana granted for every 1 point of Intelligence.</description></item>
+	 * <item><description><b>Multiplier (X) < 1.0:</b> 1 point of MaxMana granted for every (1/X) points of Intelligence.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Calculations")
 	float IntelligenceMultiplier = 2.5f;
 
 	/**
 	 * <summary>
-	 * The mathematical weight applied to the Character's current Level.
+	 * Represents the multiplier (X) for how MaxMana scales with the Character's Level.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Multiplier (X) > 1.0:</b> X point(s) of MaxMana granted for every 1 Character Level.</description></item>
+	 * <item><description><b>Multiplier (X) < 1.0:>/b> 1 point of MaxMana granted for every (1/X) Character Levels.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Calculations")
 	float LevelMultiplier = 15.0f;

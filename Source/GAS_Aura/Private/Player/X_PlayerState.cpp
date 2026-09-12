@@ -1,6 +1,5 @@
 ﻿// Copyright © 2026 616 Studio LLC. All Rights Reserved. ([https://616.studio](https://616.studio))
 
-
 #include "Player/X_PlayerState.h"
 #include "AbilitySystem/X_AbilitySystemComponent.h"
 #include "AbilitySystem/X_AttributeSet.h"

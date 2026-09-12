@@ -49,16 +49,24 @@ private:
 	
 public:
 	
+	virtual int32 GetCharacterLevel() const override;
+	
+	virtual void SetCharacterLevel(int32 Level) override;
+	
+	virtual ECharacterClass GetCharacterClass() const override;
+	
+	virtual void SetCharacterClass(const ECharacterClass NewClassType) override;
+	
 	/**
 	 * <summary>
-	 * <c>IAbilitySystemInterface</c> implementation (overriden from <c>X_Character_Base</c>). Returns the Ability System Component associated with this Character.
+	 * <c>IAbilitySystemInterface</c> implementation (overriden from <c>X_Character_Base</c>). Returns the Ability System Component constructed and managed by <c>X_PlayerState</c>.
 	 * </summary>
 	 */
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
 	/**
 	 * <summary>
-	 * Returns the Attribute Set associated with this Character (overriden from <c>X_Character_Base</c>).
+	 * Returns the Attribute Set associated with this Character constructed and managed by <c>X_PlayerState</c> (overriden from <c>X_Character_Base</c>).
 	 * </summary>
 	 */
 	virtual UAttributeSet* GetAttributeSet() const override;

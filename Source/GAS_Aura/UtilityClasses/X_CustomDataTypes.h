@@ -1,12 +1,16 @@
-// Copyright © 2026 616 Studio LLC. All Rights Reserved. ([https://616.studio](https://616.studio))
+﻿// Copyright © 2026 616 Studio LLC. All Rights Reserved. ([https://616.studio](https://616.studio))
 
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
+#include "AttributeSet.h"
 #include "GameplayEffectTypes.h"
-#include "X_GAS_DataTypes.generated.h"
+#include "Engine/DataTable.h"
+#include "X_CustomDataTypes.generated.h"
 
 // Forward declarations
+class UTexture2D;
 class UAbilitySystemComponent;
 class AActor;
 class AController;
@@ -16,9 +20,11 @@ class UBehaviorTree;
 
 /**
  * <summary>
- * This file consolidates the declaration of all the different data types specific to GAS in the project.
+ * This file consolidates the declaration of all the different custom data types used across the project.
  * </summary>
  */
+
+#pragma region GAS
 
 /**
  * <summary>
@@ -159,7 +165,7 @@ struct FX_CharacterClassDefaultInfo
     
     /**
      * <summary>
-     * Gameplay Effect used to update the values of the Secondary Attributes:  Armor, Armor Penetration, Block Chance, Critical Hit Chance, Critical Hit Damage, Critical Hit Resistance, Health Regeneration, Mana Regeneration, Max Health, and Max Mana.
+     * Gameplay Effect used to update the values of the Secondary Attributes.
      * </summary>
      * <remarks>
      * <b>ARCHITECTURE NOTES:</b>
@@ -167,7 +173,7 @@ struct FX_CharacterClassDefaultInfo
      * <item><description><b>Modifier Op (Add (Base)) + Modifier Magnitude (Attribute Based):</b> Secondary Attributes derive their values from Primary Attributes.</description></item>
      * <item><description>Only MaxHealth and MaxMana are derived from custom calculation classes (<c>X_MMC_MaxHealth</c> and <c>X_MMC_MaxMana</c>).</description></item>
      * <item><description><b>Players (Hero Class):</b> The Duration Policy must be Infinite to maintain a "live link." This ensures the Secondary Attributes are updated dynamically whenever the Primary Attributes are changed.</description></item>
-     * <item><description><b>NPCs:</b> Since NPCs do not gain levels or change their Primary Attributes during gameplay, the Duration Policy is set to Instant.</description></item>
+     * <item><description><b>NPCs:</b> Since NPCs do not gain levels or change their Primary Attributes during gameplay (for now), the Duration Policy is set to Instant.</description></item>
      
      * </list>
      * </remarks>
@@ -177,7 +183,7 @@ struct FX_CharacterClassDefaultInfo
     
     /**
      * <summary>
-     * Gameplay Effect used to set the initial values of the Vital Attributes:  Health and Mana.
+     * Gameplay Effect used to set the initial values of the Vital Attributes.
      * </summary>
      * <remarks>
      * <b>ARCHITECTURE NOTES:</b>
@@ -191,14 +197,14 @@ struct FX_CharacterClassDefaultInfo
     
     /**
      * <summary>
-     * Gameplay Effect used to set the initial values of the Resistance Attributes:  FireResistance, IceResistance, PoisonResistance, ShockResistance, SlashingResistance, CrushingResistance, and PiercingResistance.
+     * Gameplay Effect used to set the initial values of the Resistance Attributes.
      * </summary>
      * <remarks>
      * <b>ARCHITECTURE NOTES:</b>
      * <list type="bullet">
      * <item><description><b>Modifier Op (Override) + Modifier Magnitude (Attribute Base):</b> The initial values of the Resistance Attributes are derived from the Primary Attributes.</description></item>
      * <item><description><b>Players (Hero Class):</b> The Duration Policy must be Infinite to maintain a "live link." This ensures the Secondary Attributes are updated dynamically whenever the Primary Attributes are changed.</description></item>
-     * <item><description><b>NPCs:</b> Since NPCs do not gain levels or change their Primary Attributes during gameplay, the Duration Policy is set to Instant.</description></item>
+     * <item><description><b>NPCs:</b> Since NPCs do not gain levels or change their Primary Attributes during gameplay (for now), the Duration Policy is set to Instant.</description></item>
      * </list>
      * </remarks>
      */
@@ -207,7 +213,7 @@ struct FX_CharacterClassDefaultInfo
     
     /**
      * <summary>
-     * Infinite Gameplay Effect used to assign default Gameplay Tags to each <c>ECharacterClass</c> that should remain indefinitely.
+     * Infinite Gameplay Effect used to assign default Gameplay Tags to each <c>ECharacterClass</c>.
      * </summary>
      */
     UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Class Defaults")
@@ -280,4 +286,168 @@ struct FX_GameplayTaggedAnimMontage
     float ImpactDelay = 0.5f;
 };
 
+#pragma endregion GAS
 
+#pragma region UI
+
+/**
+ * <summary>
+ * Defines the row structure used by the Data Table asset <c>DT_ScreenMessage_ItemPickup</c> .
+ * </summary>
+ * <remarks>
+ * <b>ARCHITECTURE NOTES:</b>
+ * <list type="bullet">
+ * <item><description>Each row contains the text to be displayed (<c>Message</c>), the image to be displayed (<c>Image</c>), and the View class to be used (<c>WBP_View_ScreenMessage_ItemPickup</c>) to display the data.</description></item>
+ * </list>
+ * <b>IMPORTANT:</b>
+ * <list type="bullet">
+ * <item><description>The <c>Row Name</c> in the Data Table <b>MUST</b> match the <c>MessageTag</c> exactly for the <c>FindRow</c> lookup logic to succeed.</description></item>
+ * <item><description><c>MessageTag</c> must match the Asset Tag of the Gameplay Effect tied to the item being picked up.</description></item>
+ * </list>
+ * </remarks>
+ */
+USTRUCT(BlueprintType)
+struct FScreenMessageItemPickupRowStructure : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayTag MessageTag = FGameplayTag();
+    
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText Message = FText();
+    
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSoftObjectPtr<UTexture2D> Image;
+    
+	// Forward declare the class here so we don't need to include the massive View base class header.
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSoftClassPtr<class UX_UI_View_Base> View; 
+};
+
+/**
+ * <summary>
+ * Maps an <c>FGameplayAttribute</c> to an <c>FGameplayTag</c> and its localized display information.
+ * </summary>
+ */
+USTRUCT(BlueprintType)
+struct FAttributeDisplayInfo
+{
+	GENERATED_BODY()
+	
+	/**
+	 * <summary>
+	 * The Gameplay Attribute.
+	 * </summary>
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayAttribute Attribute;
+
+	/**
+	 * <summary>
+	 * The unique <c>FGameplayTag</c> associated with this specific Attribute.
+	 * </summary>
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag AttributeTag = FGameplayTag();
+
+	/**
+	 * <summary>
+	 * The localized name of the Attribute.
+	 * </summary>
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FText AttributeName = FText();
+
+	/**
+	 * <summary>
+	 * The localized description explaining what the Attribute does.
+	 * </summary>
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FText AttributeDescription = FText();
+
+	/**
+	 * <summary>
+	 * The current numeric value of the Attribute, populated dynamically at runtime.
+	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Runtime Only:</b>  This value is not configured in the Data Asset, but is injected by the Controller right before it is broadcast.</description></item>
+	 * </list>
+	 * </remarks>
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float AttributeValue = 0.0f;
+	
+};
+
+/**
+ * <summary>
+ * Used to consolidate broadcasts of CurrentValue and MaxValue Attributes into a single payload for Progress Bar specific UI elements to avoid "frame 0" initial View state synchronization issues.
+ * </summary>
+ * <remarks>
+ * <b>ARCHITECTURE NOTES:</b>
+ * <list type="bullet">
+ * <item><description>Prevents MaxValue arriving before CurrentValue to avoid SafeDivide calls that result in a percentage value of 0, forcing Progress Bar specific UI elements to appear empty on "frame 0" of UI initialization.</description></item>
+ * </list>
+ * </remarks>
+ */
+USTRUCT(BlueprintType)
+struct FX_AttributeDisplayProgressBar
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "UI|Attributes")
+	float CurrentValue = 0.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UI|Attributes")
+	float MaxValue = 0.0f;
+};
+
+/**
+ * <summary>
+ * Struct payload used to transport the Models of the MVC UI architecture (<c>PC</c>, <c>PS</c>, <c>ASC</c>, and <c>AS</c>) to Controllers.
+ * </summary>
+ * <remarks>
+ * <b>ARCHITECTURE NOTES:</b>
+ * <list type="bullet">
+ * <item><description>Uses base Engine pointers rather than derived classes to avoid hardcoded dependencies.</description></item>
+ * <item><description>Any required casting to derived classes is handled internally by the receiving Controller.</description></item>
+ * </list>
+ * </remarks>
+ */
+USTRUCT(BlueprintType)
+struct FModelsPayload
+{
+	GENERATED_BODY()
+
+	FModelsPayload() {}
+	FModelsPayload(
+		APlayerController* InPlayerController,
+		APlayerState* InPlayerState,
+		UAbilitySystemComponent* InAbilitySystemComponent,
+		UAttributeSet* InAttributeSet
+		)
+		:
+		PlayerController(InPlayerController),
+		PlayerState(InPlayerState),
+		AbilitySystemComponent(InAbilitySystemComponent),
+		AttributeSet(InAttributeSet)
+	{}
+
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<APlayerController> PlayerController;
+
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<APlayerState> PlayerState;
+
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY(BlueprintReadWrite)
+	TObjectPtr<UAttributeSet> AttributeSet;
+};
+
+#pragma endregion UI

@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "AbilitySystem/X_GAS_DataTypes.h"
+#include "GAS_Aura/UtilityClasses/X_CustomDataTypes.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/X_CharacterInterface.h"
 #include "Interfaces/X_CursorHighlightInterface.h"
 #include "X_Character_Base.generated.h"
 
 class UAttributeSet;
+
 /**
  * <summary>
  * Abstract Base Class for all Characters (Players and NPCs).
@@ -133,7 +134,7 @@ protected:
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
 	 * <item><description><b>Server-Side Only:</b> Called from <c>PossessedBy</c> in both <c>X_Character_Player</c> and <c>X_Character_NPC</c>.</description></item>
-	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game State (<c>BP_GameState</c>).</description></item>
+	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game State (<c>BP_GameState_Base</c>).</description></item>
 	 * </list>
 	 * </remarks>
 	 * <param name="InSourceObject">[<c>UObject*</c>]: The Object that owns the effect.</param>
@@ -144,7 +145,7 @@ protected:
 	 */
 	virtual void InitializeAttributes(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, const ECharacterClass InCharacterClass, const int32 InCharacterLevel);
 	
-		/**
+	/**
 	 * <summary>
 	 * Grants the assigned default Gameplay Abilities to the Character based on their Character's Class.
 	 * </summary>
@@ -152,7 +153,7 @@ protected:
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
 	 * <item><description><b>Server-Side Only:</b> Called from <c>PossessedBy</c> in both <c>X_Character_Player</c> and <c>X_Character_NPC</c>.</description></item>
-	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game Mode.</description></item>
+	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game State (<c>BP_GameState_Base</c>).</description></item>
 	 * </list>
 	 * </remarks>
 	 * <param name="InCharacterLevel">[<c>cont int32</c>]: The Level to grant the Gameplay Abilities at based on the Character's current Level.</param>
@@ -168,7 +169,7 @@ protected:
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
 	 * <item><description><b>Server-Side Only:</b> Called from <c>PossessedBy</c> in both <c>X_Character_Player</c> and <c>X_Character_NPC</c>.</description></item>
-	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game Mode.</description></item>
+	 * <item><description>Utilizes Data Asset <c>DA_CharacterClassInfo</c> stored on the Game State (<c>BP_GameState_Base</c>).</description></item>
 	 * </list>
 	 * </remarks>
 	 * <param name="InCharacterLevel">[<c>int32</c>]: The Level to grant the abilities at based on the Character's current Level.</param>
@@ -287,40 +288,22 @@ protected:
 	FName WeaponProjectileSocketName = "WeaponProjectileSocket";
 	
 private:
+	
 	/**
 	 * <summary>
 	 * Consolidated helper function for initializing the Character's weapon.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>This function contains <c>CreateDefaultSubobject</c> and <b>MUST ONLY</b> be called from the Constructor!</description></item>
+	 * </list>
+	 * </remarks>
 	 */
 	void InitWeapon();
 	
 #pragma endregion Weapon
 	
-#pragma region UI
-	
-public:
-	
-	/**
-	 * <summary>
-	 * Called by the Server to broadcast a damage event to ALL clients so they can render their floating damage text user widget locally.
-	 * </summary>
-	 * <remarks>
-	 * <b>ARCHITECTURE NOTES:</b>
-	 * <list type="bullet">
-	 * <item><description>Uses NetMulticast so the server knows to broadcast to all clients.</description></item>
-	 * <item><description>Uses Unreliable network routing to save bandwidth during high-volume AoE combat.</description></item>
-	 * </list>
-	 * </remarks>
-	 */
-	UFUNCTION(NetMulticast, Unreliable)
-	virtual void MulticastRPC_BroadcastDamage(const float DamageAmount, const FVector TargetLocation, AActor* InstigatorActor, const FGameplayTag MessageTag, const FGameplayTag AbilityTag);
-	
-protected:
-	
-private:
-	
-#pragma endregion UI
-
 #pragma region Cursor Highlight Behavior
 	
 public:

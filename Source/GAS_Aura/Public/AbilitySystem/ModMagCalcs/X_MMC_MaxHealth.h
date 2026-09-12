@@ -8,7 +8,7 @@
 
 /**
  * <summary>
- * Custom calculation class used by Gameplay Effects to dynamically determine the Max Health Attribute based on Vigor and Character Level.
+ * Custom calculation class used by Gameplay Effects to dynamically determine the MaxHealth Attribute based on Vigor and Character Level.
  * </summary>
  */
 UCLASS()
@@ -55,7 +55,7 @@ private:
 	
 	/**
 	 * <summary>
-	 * The starting baseline value for the calculation.
+	 * The minimum starting MaxHealth value before Vigor and Character Level are factored in.
 	 * </summary>
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Calculations")
@@ -63,16 +63,30 @@ private:
 
 	/**
 	 * <summary>
-	 * The mathematical weight applied to the captured Vigor attribute.
+	 * Represents the multiplier (X) for how MaxHealth scales with Vigor.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Multiplier (X) > 1.0:</b> X point(s) of MaxHealth granted for every 1 point of Vigor.</description></item>
+	 * <item><description><b>Multiplier (X) < 1.0:</b> 1 point of MaxHealth granted for every (1/X) points of Vigor.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Calculations")
 	float VigorMultiplier = 2.5f;
 
 	/**
 	 * <summary>
-	 * The mathematical weight applied to the Character's current Level.
+	 * Represents the multiplier (X) for how MaxHealth scales with the Character's Level.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description><b>Multiplier (X) > 1.0:</b> X point(s) of MaxHealth granted for every 1 Character Level.</description></item>
+	 * <item><description><b>Multiplier (X) < 1.0:>/b> 1 point of MaxHealth granted for every (1/X) Character Levels.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Calculations")
 	float LevelMultiplier = 10.0f;

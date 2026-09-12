@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/X_GAS_DataTypes.h"
+#include "GAS_Aura/UtilityClasses/X_CustomDataTypes.h"
 #include "UObject/Interface.h"
 #include "X_CharacterInterface.generated.h"
 

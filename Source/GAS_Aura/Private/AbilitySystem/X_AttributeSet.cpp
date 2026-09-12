@@ -69,13 +69,13 @@ void UX_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 		SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
 	}	
 	
-	/*
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
 		// We always want to store the value of the IncomingDamage Attribute in a temporary value so we can clear out the IncomingDamage Attribute value between every application.
 		const float LocalIncomingDamage = GetIncomingDamage();
 		SetIncomingDamage(0.0f);
 		
+		/*
 		// Check if they are already dead BEFORE applying damage to prevent duplication of death behavior (ragdoll, material dissolve, etc.).
 		bool bWasAlreadyDead = false;
 		IX_CharacterInterface* CharacterInterface = Cast<IX_CharacterInterface>(EffectProperties.TargetAvatarActor);
@@ -83,7 +83,9 @@ void UX_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 		{
 			bWasAlreadyDead = CharacterInterface->Execute_IsDead(EffectProperties.TargetAvatarActor);
 		}
+		*/
 		
+		/*
 		// Route visuals through the TargetAvatarActor, not the TargetCharacter (which relies on the Controller) so non-Controller based actors can still spawn floating combat text.
 		// We ALWAYS broadcast the damage event so the UI (spawned floating combat text) can show "0", "Blocked", or "Immune".
 		if (AX_Character_Base* TargetAvatar = Cast<AX_Character_Base>(EffectProperties.TargetAvatarActor))
@@ -101,7 +103,7 @@ void UX_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 			{
 				MessageTag = XGameplayTags::UI_Message_Combat_CriticalHit;
 			}
-							
+						
 			// Ability Icon Tag
 			// Grab all Gameplay Tags attached to this Gameplay Effect.
 			FGameplayTagContainer AssetTags;
@@ -125,24 +127,28 @@ void UX_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 				MessageTag, 
 				AbilityTag
 			);
+			
 		}
+		*/
 		
+		/*
 		// If they were already dead, or no actual damage was dealt to health, we can safely exit now
 		// before doing health subtractions or triggering hit reaction animations.
 		if (bWasAlreadyDead || LocalIncomingDamage <= 0.0f) return;
+		*/
 		
 		// Update Health with clamping.
 		const float NewHealth = GetHealth() - LocalIncomingDamage;
 		SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
 		
+		/*
 		// Check if this application instance is fatal for the Character.
 		const bool bIsFatal = NewHealth <= 0.0f;
 		
 		// Perform death behavior.
 		if (bIsFatal)
 		{
-		*/
-			/* TODO:  Implement!
+			// TODO:  Implement!
 			// Construct an FGameplayEventData payload containing full context attribution
 			// This allows abilities (like a passive "Soul Steal" or XP calculation ability) to listen for the event on the Source ASC without polluting the UAttributeSet with hardcoded class dependencies.
 			FGameplayEventData EventData;
@@ -171,8 +177,7 @@ void UX_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 				   EventData
 				);
 			}
-			*/
-			/*
+			
 			if (CharacterInterface)
 			{
 				CharacterInterface->PerformDeathBehavior();
@@ -191,8 +196,8 @@ void UX_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 				EffectProperties.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
 		}	
+		*/
 	}
-	*/
 }
 
 
@@ -221,6 +226,15 @@ void UX_AttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, ManaRegeneration, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, MaxHealth, COND_None, REPNOTIFY_Always);	
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, MaxMana, COND_None, REPNOTIFY_Always);
+	
+	// Resistance Attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, FireResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, IceResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, ShockResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, PoisonResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, SlashingResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, CrushingResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, PiercingResistance, COND_None, REPNOTIFY_Always);
 	
 }
 

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "AbilitySystem/X_GAS_DataTypes.h"
+#include "GAS_Aura/UtilityClasses/X_CustomDataTypes.h"
 #include "X_GameplayEffectActor_Base.generated.h"
 
 class UGameplayEffect;
@@ -16,9 +16,9 @@ class UGameplayEffect;
  * <b>ARCHITECTURE NOTES:</b>
  * <list type="bullet">
  * <item><description>Retrieves a target's <c>UAbilitySystemComponent</c> upon overlap and tells it to apply a <c>UGameplayEffect</c> to itself.</description></item>
- * <item><description><b>UGameplayEffect (The Blueprint):</b> The static data definition. It just says "Reduce Health by 50." It does nothing on its own.</description></item>
- * <item><description><b>FGameplayEffectSpec (The Payload):</b> Takes the static Blueprint and injects your current level and stats into it. It says, "The Actor is Level 10, so reduce Health by 500."</description></item>
- * <item><description><b>FActiveGameplayEffectHandle (The Receipt):</b> The ID tag of the math after it has been successfully attached to a player. You use this ID to find the math and turn it off later.</description></item>
+ * <item><description><b>UGameplayEffect (The Blueprint):</b> The static data definition.</description></item>
+ * <item><description><b>FGameplayEffectSpec (The Payload):</b> Takes the static Blueprint and injects this Actor's current Level into it.</description></item>
+ * <item><description><b>FActiveGameplayEffectHandle (The Receipt):</b> The ID tag of the Effect after it has been successfully attached to a target. Used to find the Effect and turn it off later.</description></item>
  * </list>
  * </remarks>
  */
@@ -29,9 +29,6 @@ class GAS_AURA_API AX_GameplayEffectActor_Base : public AActor
 
 public:
 	AX_GameplayEffectActor_Base();
-
-protected:
-	virtual void BeginPlay() override;
 	
 	/**
 	 * <summary>
@@ -41,16 +38,19 @@ protected:
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
 	 * <item><description>Invoked by the engine game thread when any attached <c>UPrimitiveComponent</c> (with <c>bGenerateOverlapEvents = true</c>) detects a collision overlap.</description></item>
-	 * <item><description>Calling <c>Super::NotifyActorBeginOverlap</c> internally broadcasts the <c>OnActorBeginOverlap</c> dynamic delegate and dispatches the Blueprint <c>ReceiveActorBeginOverlap</c> event.</description></item>
+	 * <item><description>Calling <c>Super::NotifyActorBeginOverlap</c> / <c>Super::NotifyActorEndOverlap</c> internally broadcasts the <c>OnActorBeginOverlap</c> / <c>OnActorEndOverlap</c> dynamic delegate and dispatches the Blueprint event <c>ReceiveActorBeginOverlap</c> / <c>ReceiveActorEndOverlap</c>.</description></item>
 	 * </list>
 	 * </remarks>
 	 */
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+
+protected:
+	virtual void BeginPlay() override;
 	
 	/**
 	 * <summary>
-	 * Triggered via <c>NotifyActorBeginOverlap</c>, which fires when any collision component attached to the root of this Actor triggers an overlap event.
+	 * Triggered via <c>NotifyActorBeginOverlap</c>.
 	 * </summary>
 	 * <param name="TargetActor">[<c>AActor*</c>]: The Actor overlapping with this GE Actor.</param>
 	 */
@@ -59,7 +59,7 @@ protected:
 
 	/**
 	 * <summary>
-	 * Triggered via <c>NotifyActorEndOverlap</c>, which fires when any collision component attached to the root of this Actor triggers an overlap event.
+	 * Triggered via <c>NotifyActorEndOverlap</c>.
 	 * </summary>
 	 * <param name="TargetActor">[<c>AActor*</c>]: The Actor ending overlap with this GE Actor.</param>
 	 */
@@ -163,7 +163,7 @@ protected:
 	
 	/** 
 	 * <summary>
-	 * Used to determine the amount of stacks of the infinite effect that should be removed when the Actor leaves the component overlap.
+	 * Used to determine the amount of stacks of the Infinite Gameplay Effect that should be removed when the Actor leaves the component overlap.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
@@ -201,7 +201,7 @@ protected:
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
 	 * <item><description>Takes a <c>TargetActor</c> and attempts to find its Ability System Component.</description></item>
-	 * <item><description>Builds the <c>FGameplayEffectSpec</c> (the payload) from the provided Blueprint class and our <c>ActorLevel</c>.</description></item>
+	 * <item><description>Builds the <c>FGameplayEffectSpec</c> (the payload) from the provided Blueprint class and the <c>ActorLevel</c>.</description></item>
 	 * <item><description>Tells the Target's ASC to apply the spec to itself.</description></item>
 	 * </list>
 	 * </remarks>

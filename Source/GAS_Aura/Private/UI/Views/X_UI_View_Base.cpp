@@ -3,10 +3,14 @@
 
 #include "UI/Views/X_UI_View_Base.h"
 
-void UX_UI_View_Base::AssignControllerToView(UObject* ControllerToAssign)
+void UX_UI_View_Base::PerformInitialization_Implementation()
 {
-	CurrentlyAssignedController = ControllerToAssign;
+	ReadyToInitialize();
+}
 
-	// Notify Blueprint subclasses that the Controller is safely cached and ready for data binding.
-	ControllerHasBeenAssigned();
+void UX_UI_View_Base::NativeDestruct()
+{
+	Super::NativeDestruct();
+	
+	bIsInitialized = false;
 }

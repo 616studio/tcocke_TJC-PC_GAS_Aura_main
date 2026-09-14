@@ -15,7 +15,6 @@ class UX_UI_Controller_Base;
  * <remarks>
  * <b>ARCHITECTURE NOTES:</b>
  * <list type="bullet">
- * <item><description><b>Visual Only:</b> Performs no calculations or logic and stores no game states.</description></item>
  * <item><description><b>Implementation:</b> Designed to be subclassed exclusively as Widget Blueprints (<c>WBPs</c>) in the Editor.</description></item>
  * </list>
  * </remarks>

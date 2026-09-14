@@ -337,7 +337,15 @@ struct FAttributeDisplayInfo
 	
 	/**
 	 * <summary>
-	 * The Gameplay Attribute.
+	 * The unique <c>FGameplayTag</c> associated with this specific Gameplay Attribute.
+	 * </summary>
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag AttributeTag = FGameplayTag();
+	
+	/**
+	 * <summary>
+	 * The native GAS Gameplay Attribute.
 	 * </summary>
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -345,31 +353,35 @@ struct FAttributeDisplayInfo
 
 	/**
 	 * <summary>
-	 * The unique <c>FGameplayTag</c> associated with this specific Attribute.
+	 * The localized name of the Gameplay Attribute.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>Auto-populated in <c>X_AttributeDisplayInfo</c> from the Gameplay Tag specified in <c>X_GameplayTags</c>.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FGameplayTag AttributeTag = FGameplayTag();
-
-	/**
-	 * <summary>
-	 * The localized name of the Attribute.
-	 * </summary>
-	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	FText AttributeName = FText();
 
 	/**
 	 * <summary>
-	 * The localized description explaining what the Attribute does.
+	 * The localized description explaining what the Gameplay Attribute does.
 	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>Auto-populated in <c>X_AttributeDisplayInfo</c> from the comments specified in <c>X_GameplayTags</c>.</description></item>
+	 * </list>
+	 * </remarks>
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	FText AttributeDescription = FText();
 
 	/**
 	 * <summary>
-	 * The current numeric value of the Attribute, populated dynamically at runtime.
+	 * The current numeric value of the Gameplay Attribute, populated dynamically at runtime.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>

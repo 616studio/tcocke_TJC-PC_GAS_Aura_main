@@ -41,6 +41,25 @@ void UX_AttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribute
 	}
 }
 
+void UX_AttributeSet::PostAttributeBaseChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) const
+{
+	Super::PostAttributeBaseChange(Attribute, OldValue, NewValue);
+}
+
+void UX_AttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
+{
+	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+	
+	// Clamps current Health down to new MaxHealth when MaxHealth changes result in Health being larger than MaxHealth.
+	if (Attribute == GetMaxHealthAttribute())
+	{
+		if (GetHealth() > NewValue)
+		{
+			SetHealth(NewValue);
+		}
+	}
+}
+
 void UX_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);

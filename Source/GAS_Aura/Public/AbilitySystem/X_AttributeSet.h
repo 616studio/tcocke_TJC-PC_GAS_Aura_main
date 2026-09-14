@@ -66,6 +66,42 @@ public:
 	virtual void PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
 
 	/**
+	 * <summary>
+	 * Fires immediately <b>AFTER</b> an Attribute's permanent <b>Base Value</b> has been modified.
+	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>Fires strictly for un-buffed permanent Base Value changes (via Instant/Periodic Gameplay Effects or direct C++ setters like <c>SetBaseValue</c>), completely ignoring temporary Duration/Infinite modifiers.</description></item>
+	 * <item><description>Executes after the new base value has already been committed to the Attribute Set.</description></item>
+	 * <item><description>Used for permanent stat shifts such as level-ups or stat allocations (e.g., scaling base <c>Health</c> proportionally when base <c>MaxHealth</c> increases permanently).</description></item>
+	 * </list>
+	 * </remarks>
+	 * <param name="Attribute">[<c>FGameplayAttribute&</c>]: The Attribute whose permanent Base Value changed.</param>
+	 * <param name="OldValue">[<c>float</c>]: The Base Value of the Attribute prior to the modification.</param>
+	 * <param name="NewValue">[<c>float</c>]: The newly committed Base Value of the Attribute.</param>
+	 */
+	virtual void PostAttributeBaseChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) const override;
+	
+	/**
+	 * <summary>
+	 * Fires immediately <b>AFTER</b> an Attribute's evaluated <b>Current Value</b> changes.
+	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>Fires whenever the final evaluated stat (<c>CurrentValue</c>) changes, responding to both permanent Base Value shifts and temporary Duration/Infinite Gameplay Effects (buffs/debuffs) applying or expiring.</description></item>
+	 * <item><description>Unlike <c>PreAttributeChange</c> (which provides a proposed reference for pre-clamp modification), this hook executes after the evaluated result is committed.</description></item>
+	 * <item><description>Used for live state reactions caused by buff expiration (e.g., clamping current <c>Health</c> down when a temporary <c>MaxHealth</c> buff expires).</description></item>
+	 * </list>
+	 * </remarks>
+	 * <param name="Attribute">[<c>FGameplayAttribute&</c>]: The Attribute whose evaluated Current Value changed.</param>
+	 * <param name="OldValue">[<c>float</c>]: The Current Value of the Attribute prior to the change.</param>
+	 * <param name="NewValue">[<c>float</c>]: The newly evaluated Current Value of the Attribute.</param>
+	 */
+	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+
+	/**
 	* <summary>
 	* Fires immediately <b>AFTER</b> the engine finishes applying a Gameplay Effect's modifiers to an Attribute's Base Value.
 	* </summary>

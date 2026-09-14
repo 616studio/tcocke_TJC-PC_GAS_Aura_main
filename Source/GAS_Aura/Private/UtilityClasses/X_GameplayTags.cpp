@@ -9,9 +9,9 @@ namespace XGameplayTags
 
 	// Primary Attributes
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary, "Attributes.Primary", "Primary Attribute container.");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Strength, "Attributes.Primary.Strength", "Increases physical damage.");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Intelligence, "Attributes.Primary.Intelligence", "Increases magical damage, Max Mana, and Mana Regeneration.");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Resilience, "Attributes.Primary.Resilience", "Increases Armor and Armor Penetration.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Strength, "Attributes.Primary.Strength", "Increases physical damage and resistance to Slashing, Crushing, and Piercing damage.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Intelligence, "Attributes.Primary.Intelligence", "Increases magical damage, Max Mana, Mana Regeneration and resistance to Fire, Ice, Shock, and Poison damage.");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Resilience, "Attributes.Primary.Resilience", "Increases Armor, Armor Penetration and resistance to all damage types.");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Vigor, "Attributes.Primary.Vigor", "Increases Max Health and Health Regeneration.");
 
 	// Secondary Attributes

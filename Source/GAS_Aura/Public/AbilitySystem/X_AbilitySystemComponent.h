@@ -30,7 +30,7 @@ public:
 
 	/**
 	 * <summary>
-	 * Binds function <c>CheckGameplayEffectHasMatchingAssetTags</c> to the native ASC Gameplay Effect delegate (<c>OnGameplayEffectAppliedDelegateToSelf</c>) to intercept Gameplay Effects applied to this ASC.
+	 * Binds function <c>CheckGameplayEffectHasMatchingAssetTags</c> to the native ASC Gameplay Effect delegate (<c>OnGameplayEffectAppliedDelegateToSelf</c>) to intercept Gameplay Effects applied to this ASC on the server.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>

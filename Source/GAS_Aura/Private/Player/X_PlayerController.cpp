@@ -62,7 +62,7 @@ void AX_PlayerController::SetupInputComponent()
 
 void AX_PlayerController::ClientSetHUD_Implementation(TSubclassOf<AHUD> NewHUDClass)
 {
-	// Diagnostics Hook 1: Missing HUDClass in GameMode
+	// Check for missing HUDClass in GameMode.
 	if (!NewHUDClass)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s: ClientSetHUD received a NULL HUDClass! Assign a valid AX_HUD class in your GameMode defaults."), *GetName());
@@ -74,7 +74,7 @@ void AX_PlayerController::ClientSetHUD_Implementation(TSubclassOf<AHUD> NewHUDCl
 
 	Super::ClientSetHUD_Implementation(NewHUDClass);
 
-	// Diagnostics Hook 2: Class Mismatch (HUD exists, but is not an AX_HUD subclass)
+	// Check for class mismatch (HUD exists, but is not an AX_HUD subclass).
 	if (AX_HUD* TargetHUD = Cast<AX_HUD>(GetHUD()))
 	{
 		OnHUDInitializedDelegate.Broadcast(TargetHUD);

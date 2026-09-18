@@ -18,12 +18,11 @@ void UX_AbilitySystemComponent::CheckGameplayEffectHasMatchingAssetTags(UAbility
 	FGameplayTagContainer TagContainer;
 	EffectSpec.GetAllAssetTags(TagContainer);
 	
-	// Server-side filter guard: aborts RPC dispatch if no UI tags exist.
+	// Only filter on hierarchical "UI.Message" tags.
 	if (TagContainer.HasTag(XGameplayTags::UI_Message))
 	{
 		Client_GameplayEffectAppliedToSelf(TagContainer);
 	}
-	
 }
 
 void UX_AbilitySystemComponent::Client_GameplayEffectAppliedToSelf_Implementation(const FGameplayTagContainer& AssetTags)

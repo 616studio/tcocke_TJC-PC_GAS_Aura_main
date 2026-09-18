@@ -235,7 +235,7 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 			return;	
 		}
 		
-		ApplyGameplayEffectToSelf(GetAbilitySystemComponent(), VitalAttributes, this, this, this, GetCharacterLevel());
+		ApplyGameplayEffectToSelf(VitalAttributes, this, this, this, GetCharacterLevel());
 	}
 }
 
@@ -295,6 +295,7 @@ void AX_Character_Player::InitAbilitySystemClientSide()
 
 void AX_Character_Player::TryInitHUD(AX_PlayerState* PS, UX_AbilitySystemComponent* XASC, UX_AttributeSet* XAS)
 {
+	// If the HUD has already been initialized or we are still waiting for HUD to replicate to the PlayerController, then leave.
 	if (bHUDInitialized || bHUDInitPending) return;
 
 	AX_PlayerController* PC = Cast<AX_PlayerController>(GetController());

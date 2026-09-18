@@ -194,14 +194,13 @@ protected:
 	 * <summary>
 	 * Helper function available to all derived classes used to apply Gameplay Effects to the ASC of the Character itself.
 	 * </summary>
-	 * <param name="ASC">[<c>UAbilitySystemComponent*</c>]: The Target ASC.</param>
 	 * <param name="GameplayEffect">[<c>TSubclassOf</c>(<c>UGameplayEffect</c>)]: The specific Gameplay Effect class to apply.</param>
 	 * <param name="SourceObject">[<c>UObject*</c>]: The Object applying the effect.</param>
 	 * <param name="InInstigator">[<c>AActor*</c>]: The physical Actor that instigated the effect.</param>
 	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical Actor that caused the effect.</param>
 	 * <param name="InCharacterLevel">[<c>int32</c>]: The Level of the Character used to scale the effect.</param>
 	 */
-	void ApplyGameplayEffectToSelf(UAbilitySystemComponent* ASC, TSubclassOf<UGameplayEffect> GameplayEffect, const UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, int32 InCharacterLevel) const;
+	void ApplyGameplayEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffect, const UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, int32 InCharacterLevel) const;
 	
 private:
 	

@@ -51,14 +51,6 @@ void AX_Character_Base::SetCharacterClass(const ECharacterClass NewClassType)
 
 void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, const ECharacterClass InCharacterClass, const int32 InCharacterLevel)
 {
-	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
-	if (!ensureMsgf(IsValid(ASC), TEXT("Actor: %s - No valid (ASC) found.  Function: %hs"),
-				   *GetName(), 
-				   __FUNCTION__))
-	{
-		return;
-	}
-	
 	// Retrieve CharacterClassInfo from GameState.
 	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
 	const AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
@@ -129,23 +121,15 @@ void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* In
 	// 2. Secondary Attributes: Uses values from Primary Attributes to calculate their own values (X_MMC_MaxHealth calculates MaxHealth using Vigor; X_MMC_MaxMana calculates MaxMana using Intelligence).
 	// 3. Vital Attributes: Uses values from Secondary Attributes to calculate their own values (Health copies in the value of MaxHealth; Mana copies in the value of MaxMana).
 	// 4. Resistance Attributes:  Uses values from both Primary Attributes and Secondary Attributes.
-	ApplyGameplayEffectToSelf(ASC, PrimaryAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
-	ApplyGameplayEffectToSelf(ASC, SecondaryAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
-	ApplyGameplayEffectToSelf(ASC, VitalAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
-	ApplyGameplayEffectToSelf(ASC, ResistanceAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+	ApplyGameplayEffectToSelf(PrimaryAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+	ApplyGameplayEffectToSelf(SecondaryAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+	ApplyGameplayEffectToSelf(VitalAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+	ApplyGameplayEffectToSelf(ResistanceAttributes, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
 }
 
 void AX_Character_Base::InitializeDefaultGameplayTags(UObject* InSourceObject, AActor* InInstigator,
 	AActor* InEffectCauser, const ECharacterClass InCharacterClass, const int32 InCharacterLevel)
 {
-	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
-	if (!ensureMsgf(IsValid(ASC), TEXT("Actor: %s - No valid (ASC) found.  Function: %hs"),
-				   *GetName(), 
-				   __FUNCTION__))
-	{
-		return;
-	}
-	
 	// Retrieve CharacterClassInfo from GameState.
 	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
 	const AX_GameState_Base* GameState = Cast<AX_GameState_Base>(UGameplayStatics::GetGameState(this));
@@ -182,7 +166,7 @@ void AX_Character_Base::InitializeDefaultGameplayTags(UObject* InSourceObject, A
 		return;	
 	}
 	
-	ApplyGameplayEffectToSelf(ASC, DefaultGameplayTags, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
+	ApplyGameplayEffectToSelf(DefaultGameplayTags, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
 }
 
 void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const ECharacterClass InCharacterClass, const int32 InCharacterLevel)
@@ -335,8 +319,9 @@ void AX_Character_Base::GrantClassSharedGameplayAbilitiesOnStartup(const int32 I
 	}
 }
 
-void AX_Character_Base::ApplyGameplayEffectToSelf(UAbilitySystemComponent* ASC, const TSubclassOf<UGameplayEffect> GameplayEffect, const UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, const int32 InCharacterLevel) const
+void AX_Character_Base::ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect, const UObject* SourceObject, AActor* InInstigator, AActor* InEffectCauser, const int32 InCharacterLevel) const
 {
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 	if (!ensureMsgf(IsValid(ASC), TEXT("Actor: %s - No valid (ASC) found.  Function: %hs"),
 	               *GetName(), __FUNCTION__))
 	{
@@ -364,10 +349,10 @@ void AX_Character_Base::ApplyGameplayEffectToSelf(UAbilitySystemComponent* ASC, 
 		return;
 	}
 
-	// We use ToTarget and pass our own ASC here. 
-	// While ApplyGameplayEffectSpecToSelf exists, it is simply a convenience wrapper that calls ApplyGameplayEffectSpecToTarget under the hood. 
-	// Using ToTarget directly skips the wrapper and calls the core networking and math function directly.
-	ASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC);
+	// Apply the Gameplay Effect directly to our own ASC.
+	// ApplyGameplayEffectSpecToSelf executes the core GAS pipeline (prediction, modifier math, cues).
+	// Note: ApplyGameplayEffectSpecToTarget is a forwarding wrapper that calls Target->ApplyGameplayEffectSpecToSelf under the hood.
+	ASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 }
 
 #pragma endregion Ability System

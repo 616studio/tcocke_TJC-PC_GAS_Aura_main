@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "GAS_Aura/UtilityClasses/X_CustomDelegates.h"
 #include "X_PlayerController.generated.h"
 
 class AX_HUD;
@@ -15,19 +16,7 @@ struct FInputActionValue;
 class UInputAction;
 class UInputMappingContext;
 
-/**
- * <summary>
- * Used to broadcast to the local client immediately after <c>ClientSetHUD</c> instantiates the HUD.
- * </summary>
- * <remarks>
- * <b>ARCHITECTURE NOTES:</b>
- * <list type="bullet">
- * <item><description>Enables zero-tick, event-driven UI initialization to resolve client replication timing race conditions, where the PlayerState, PlayerController, and HUD replicate down to the client on completely different frames.</description></item>
- * </list>
- * </remarks>
- * <param name="HUDInstance">[<c>AX_HUD*</c>]: Valid pointer to the newly instantiated local HUD actor.</param>
- */
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnHUDInitialized, AX_HUD* /* HUD instance */);
+
 
 /**
  * <summary>
@@ -85,7 +74,7 @@ public:
 	 * Broadcasts immediately when the local client HUD is instantiated and assigned. 
 	 * </summary>
 	 */
-	FOnHUDInitialized OnHUDInitializedDelegate;
+	FX_OnHUDInitializedSignature OnHUDInitializedDelegate;
 	
 	/**
 	 * <summary>

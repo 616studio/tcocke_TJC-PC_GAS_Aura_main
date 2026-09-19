@@ -46,7 +46,7 @@ public:
 	 * </summary>
 	 */
 	UPROPERTY(BlueprintAssignable, Category = "***CUSTOM|UI")
-	FX_ScreenMessageItemPickupSignature OnScreenMessageItemPickup;
+	FX_ScreenMessageItemPickupSignature OnScreenMessageItemPickupDelegate;
 	
 protected:
 	
@@ -116,5 +116,5 @@ private:
 	 * </remarks>
 	 * <param name="XASC">[<c>UX_AbilitySystemComponent*</c>]: The downcast Model ASC pointer used to establish the delegate binding.</param>
 	 */
-	void BindToGameplayEffectAssetTagsDelegate(UX_AbilitySystemComponent* XASC);
+	void BindToGameplayEffectUIMessageAssetTagsDelegate(UX_AbilitySystemComponent* XASC);
 };

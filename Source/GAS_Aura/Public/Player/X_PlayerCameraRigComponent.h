@@ -61,18 +61,18 @@ public:
 	void InitCamera(USpringArmComponent* InBoom, UCameraComponent* InCamera);
 	
 	/**
- * <summary>
- * Attempts to sync the PlayerController's ControlRotation to the CameraBoom's rotation.
- * </summary>
- * <remarks>
- * <b>ARCHITECTURE NOTES:</b>
- * <list type="bullet">
- * <item><description>Ensures the top-down camera's fixed isometric angle dictates the concept of "Forward" for the player's inputs. Without this sync, pressing 'W' might move the character along world-North instead of screen-Up.</description></item>
- * <item><description>Called automatically in <c>BeginPlay</c> (via <c>ApplyCameraSettings</c>).</description></item>
- * <item><description>If the Controller isn't set yet (ex: dynamically spawned Characters), the owning Character should call this again from <c>PossessedBy</c> as a fallback.</description></item>
- * </list>
- * </remarks>
- */
+	 * <summary>
+	 * Attempts to sync the PlayerController's ControlRotation to the CameraBoom's rotation.
+	 * </summary>
+	 * <remarks>
+	 * <b>ARCHITECTURE NOTES:</b>
+	 * <list type="bullet">
+	 * <item><description>Ensures the top-down camera's fixed isometric angle dictates the concept of "Forward" for the player's inputs. Without this sync, pressing 'W' might move the character along world-North instead of screen-Up.</description></item>
+	 * <item><description>Called automatically in <c>BeginPlay</c> (via <c>ApplyCameraSettings</c>).</description></item>
+	 * <item><description>If the Controller isn't set yet (ex: dynamically spawned Characters), the owning Character should call this again from <c>PossessedBy</c> as a fallback.</description></item>
+	 * </list>
+	 * </remarks>
+	 */
 	void TrySyncControlRotation();
 
 protected:
@@ -100,7 +100,7 @@ private:
 
 	/**
 	 * <summary>
-	 * Tracks whether the PlayerController's ControlRotation has been successfully synced to the CameraBoom.
+	 * Tracks whether the PlayerController's ControlRotation has been successfully synced to the <c>CameraBoom</c>.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>

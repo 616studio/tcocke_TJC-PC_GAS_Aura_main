@@ -24,7 +24,7 @@ void UX_AttributeDisplayInfo::UpdateAttributeDisplayDataFromTags()
 {
 	const UGameplayTagsManager& TagsManager = UGameplayTagsManager::Get();
 
-	for (FAttributeDisplayInfo& Mapping : AttributeMappings)
+	for (FX_AttributeDisplayInfoContainer& Mapping : AttributeMappings)
 	{
 		if (Mapping.AttributeTag.IsValid())
 		{

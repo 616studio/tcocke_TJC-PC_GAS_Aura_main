@@ -34,7 +34,7 @@ public:
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
-	 * <item><description>Can also be used by external callers to force a View to refresh its data without requiring a hard cast to the View's class type.</description></item>
+	 * <item><description>Can also be used by external callers to force a View to refresh its data.</description></item>
 	 * <item><description>Triggers internal Blueprint Event <c>ReadyToInitialize</c>.</description></item>
 	 * </list>
 	 * </remarks>
@@ -79,7 +79,7 @@ protected:
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
-	 * <item><description>Sets <c>bIsInitialized</c> to false by default for all Views to ensure it is set even if a Blueprint graph deletes or forgets the Parent: Destruct node.</description></item>
+	 * <item><description>Sets <c>bIsInitialized</c> to false by default for all Views to ensure it is set.</description></item>
 	 * <item><description><b>IMPORTANT:</b> Derived Views <b>MUST</b> call the Parent Destruct node if they implement their own logic (ex:  unbinding from delegates).</description></item>
 	 * </list>
 	 * </remarks>

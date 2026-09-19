@@ -9,7 +9,7 @@
 
 AX_Character_NPC::AX_Character_NPC()
 {
-	// Suppress tick queue overhead until active AI behavior ticking is required
+	// Suppress tick queue overhead until active AI behavior ticking is required.
 	PrimaryActorTick.bCanEverTick = false;
 	
 	InitComponentsForAbilitySystem();
@@ -79,7 +79,7 @@ void AX_Character_NPC::InitComponentsForAbilitySystem()
 
 void AX_Character_NPC::InitAbilitySystemServerAndClientSide()
 {
-	// We need the custom version to call BindToGameplayEffectDelegates, so if we can't get our custom ASC, there's no point in continuing.
+	// We need the custom version to call BindToGameplayEffectUIMessageAssetTagsDelegate, so if we can't get our custom ASC, there's no point in continuing.
 	UX_AbilitySystemComponent* XASC = Cast<UX_AbilitySystemComponent>(GetAbilitySystemComponent());
 	if (!ensureMsgf(IsValid(XASC), TEXT("Actor: %s - No valid (XASC) found.  Function: %hs"),
 				   *GetName(), __FUNCTION__))
@@ -99,8 +99,8 @@ void AX_Character_NPC::InitAbilitySystemServerAndClientSide()
 	// This communicates to the XASC who its OwnerActor and AvatarActor are.
 	XASC->InitAbilityActorInfo(this, this);
 
-	// Bind to the ToTarget and ToSelf custom delegates.
-	//XASC->BindToGameplayEffectDelegates();
+	// Bind to the custom delegate.
+	XASC->BindToGameplayEffectUIMessageAssetTagsDelegate();
 	
 	// This ensures the UI is listening before the Attributes are given their starting values.
 	//BindToAttributeDelegates();

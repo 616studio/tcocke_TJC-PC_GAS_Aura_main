@@ -163,7 +163,7 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 		return;
 	}
 
-	// We need our custom X_AbilitySystemComponent in order to call our custom function BindToGameplayEffectDelegate.
+	// We need our custom X_AbilitySystemComponent in order to call our custom function BindToGameplayEffectUIMessageAssetTagsDelegate.
 	UX_AbilitySystemComponent* XASC = Cast<UX_AbilitySystemComponent>(PS->GetAbilitySystemComponent());
 	if (!IsValid(XASC)) 
 	{
@@ -185,7 +185,7 @@ void AX_Character_Player::InitAbilitySystemServerSide()
 	XASC->InitAbilityActorInfo(PS, this);
 	
 	// Bind to the custom delegate.
-	XASC->BindToGameplayEffectDelegate();
+	XASC->BindToGameplayEffectUIMessageAssetTagsDelegate();
 	
 	// FIRST SPAWN: The Player State has no data yet. Grant everything.
 	// Server-Side Guard: Grant initial attributes EXACTLY ONCE per PlayerState lifetime.
@@ -271,15 +271,15 @@ void AX_Character_Player::InitAbilitySystemClientSide()
 	// Guard ASC initialization so it only runs once.
 	// Both OnRep_PlayerState and OnRep_Controller call this function, but we only need to initialize the ASC once.
 	// We keep this separate from the HUD guard because the Controller might arrive on a different OnRep call than the PlayerState.
-	if (!bAbilitySystemInitialized)
+	if (!bAbilitySystemInitializedOnClient)
 	{
 		// This communicates to the ASC who its OwnerActor and AvatarActor are.
 		ASC->InitAbilityActorInfo(PS, this);
 
 		// Bind to our custom delegate.
-		XASC->BindToGameplayEffectDelegate();
+		XASC->BindToGameplayEffectUIMessageAssetTagsDelegate();
 
-		bAbilitySystemInitialized = true;
+		bAbilitySystemInitializedOnClient = true;
 	}
 
 	// Simulated proxies don't need a HUD.
@@ -328,7 +328,7 @@ void AX_Character_Player::TryInitHUD(AX_PlayerState* PS, UX_AbilitySystemCompone
 		UX_AbilitySystemComponent* CurrentXASC = Cast<UX_AbilitySystemComponent>(CurrentPS->GetAbilitySystemComponent());
 		UX_AttributeSet* CurrentXAS = Cast<UX_AttributeSet>(CurrentPS->GetAttributeSet());
 
-		if (!bHUDInitialized && bAbilitySystemInitialized && IsValid(ReadyHUD) && IsValid(CurrentPC) && IsValid(CurrentPS) && IsValid(CurrentXASC) && IsValid(CurrentXAS))
+		if (!bHUDInitialized && bAbilitySystemInitializedOnClient && IsValid(ReadyHUD) && IsValid(CurrentPC) && IsValid(CurrentPS) && IsValid(CurrentXASC) && IsValid(CurrentXAS))
 		{
 			ReadyHUD->InitHUD(CurrentPC, CurrentPS, CurrentXASC, CurrentXAS);
 			bHUDInitialized = true;

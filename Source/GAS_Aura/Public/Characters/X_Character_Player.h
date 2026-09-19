@@ -156,7 +156,7 @@ private:
 	 * </list>
 	 * </remarks>
 	 */
-	bool bAbilitySystemInitialized = false;
+	bool bAbilitySystemInitializedOnClient = false;
 	
 	/**
 	 * <summary>

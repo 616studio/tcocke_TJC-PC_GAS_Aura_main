@@ -30,7 +30,7 @@ void UX_UI_Controller_ProgressBar::BroadcastCurrentModelValues()
 	
 	AttributeInfo.CurrentValue = XASC->GetNumericAttribute(CurrentValueAttribute);
 	AttributeInfo.MaxValue = XASC->GetNumericAttribute(MaxValueAttribute);
-	OnAttributeValueChanged.Broadcast(AttributeInfo);	
+	OnAttributeValueChangedDelegate.Broadcast(AttributeInfo);	
 }
 
 void UX_UI_Controller_ProgressBar::BindCallbacksToModelDelegates()
@@ -69,7 +69,7 @@ void UX_UI_Controller_ProgressBar::BindCallbacksToModelDelegates()
 			AttributeInfo.CurrentValue = Data.NewValue;
 			AttributeInfo.MaxValue = XASC->GetNumericAttribute(MaxValueAttribute);
 			
-			OnAttributeValueChanged.Broadcast(AttributeInfo);
+			OnAttributeValueChangedDelegate.Broadcast(AttributeInfo);
 		}
 	);
 	
@@ -83,7 +83,7 @@ void UX_UI_Controller_ProgressBar::BindCallbacksToModelDelegates()
 			AttributeInfo.CurrentValue = XASC->GetNumericAttribute(CurrentValueAttribute);
 			AttributeInfo.MaxValue = Data.NewValue;
 			
-			OnAttributeValueChanged.Broadcast(AttributeInfo);
+			OnAttributeValueChangedDelegate.Broadcast(AttributeInfo);
 		}
 	);
 	

@@ -11,7 +11,7 @@ class UWidget;
 class UX_UI_Controller_Base;
 class UX_CharacterClassInfo;
 struct FGameplayEffectContextHandle;
-struct FModelsPayload;
+struct FX_ModelsPayload;
 class AX_HUD;
 class UX_UI_Controller_HUD;
 class UX_UI_Controller_AttributeMenu;
@@ -43,7 +43,7 @@ public:
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
-	 * <item><description><b>Decoupled View Lookup:</b> Enables sub-widgets to retrieve their dedicated UI Controllers without storing hard references to HUD instances.</description></item>
+	 * <item><description><b>Decoupled View Lookup:</b> Enables Views to retrieve their dedicated UI Controllers without storing hard references to HUD instances.</description></item>
 	 * <item><description><b>World Tracing:</b> Resolves the local <c>APlayerController</c> using <c>GetPlayerControllerFromWorldContextObject</c> before querying <c>AX_HUD</c>.</description></item>
 	 * </list>
 	 * </remarks>
@@ -56,7 +56,7 @@ public:
 	
 	/**
 	 * <summary>
-	 * Recursively traverses a UMG widget tree and invokes PerformInitialization on any widget implementing IX_UI_ViewInterface.
+	 * Recursively traverses a UMG widget tree and invokes PerformInitialization on any View implementing IX_UI_ViewInterface.
 	 * </summary>
 	 * <param name="RootWidget">[<c>UWidget*</c>]: The top-level container or root panel to begin recursive traversal from.</param>
 	 */

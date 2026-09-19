@@ -8,7 +8,15 @@
 
 class UCharacterMovementComponent;
  /**
+ * <summary>
  * Caches references common to Characters used in their ABPs.
+ * </summary>
+ * <remarks>
+ * <b>ARCHITECTURE NOTES:</b>
+ * <list type="bullet">
+ * <item><description>When creating an ABP for a Character, make sure to use specify class as the Parent Class.</description></item>
+ * </list>
+ * </remarks>
  */
 UCLASS()
 class GAS_AURA_API UX_Character_AnimInstance : public UAnimInstance
@@ -34,25 +42,45 @@ public:
 	
 protected:
 	
-	/** Cached reference to owning Character. */
+	/** 
+	 * <summary>
+	 * Cached reference to owning Character.
+	 * </summary>
+	 */
 	UPROPERTY(BlueprintReadOnly, Category = "***CUSTOM|Animation")
 	TWeakObjectPtr<ACharacter> CharacterOwner;
 	
-	/** Cached reference to owning Character's CharacterMovementComponent. */
+	/** 
+	 * <summary>
+	 * Cached reference to owning Character's CharacterMovementComponent. 
+	 * </summary>
+	 */
 	UPROPERTY(BlueprintReadOnly, Category = "***CUSTOM|Animation")
 	TWeakObjectPtr<UCharacterMovementComponent> CharMoveComp;
 	
-	/** Cached 2D (XY) vector length for velocity used for blend spaces. */
+	/** 
+	 * <summary>
+	 * Cached 2D (XY) vector length for velocity used for blend spaces. 
+	 * </summary>
+	 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "***CUSTOM|Animation")
 	float GroundSpeed = 0.0f;
 	
-	/** Cached acceleration state. */
+	/** 
+	 * <summary>
+	 * Cached acceleration state. 
+	 * </summary>
+	 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "***CUSTOM|Animation")
 	bool bIsAccelerating = false;
 			
 private:
 	
-	/** Helper function. */
+	/** 
+	 * <summary>
+	 * Helper function to cache references to <c>CharacterOwner</c> and <c>CharMoveComp</c>. 
+	 * </summary>
+	 */
 	void CacheReferences();
 	
 #pragma endregion Custom

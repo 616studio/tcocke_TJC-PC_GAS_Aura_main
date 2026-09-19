@@ -4,11 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "GAS_Aura/UtilityClasses/X_CustomDataTypes.h"
 #include "AttributeSet.h"
 #include "X_AttributeSet.generated.h"
 
-struct FX_EffectProperties;
 /**
  * <summary>
  * GAS requires subclassing of <c>UAttributeSet</c> in order to define, clamp, and replicate the project's specific Gameplay Attributes.
@@ -16,7 +14,7 @@ struct FX_EffectProperties;
  * <remarks>
  * <b>ARCHITECTURE NOTES:</b>
  * <list type="bullet">
- * <item><description>Intercepts incoming Gameplay Effects (via <c>PreAttributeChange</c>, <c>PreAttributeBaseChange</c>, and <c>PostGameplayEffectExecute</c>) to clamp values or trigger additional logic.</description></item>
+ * <item><description>Intercepts incoming Gameplay Effects to clamp values or trigger additional logic.</description></item>
  * </list>
  * <b>IMPORTANT:</b>
  * <list type="bullet">

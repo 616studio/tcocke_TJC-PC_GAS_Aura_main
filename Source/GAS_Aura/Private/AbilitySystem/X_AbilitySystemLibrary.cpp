@@ -43,7 +43,7 @@ void UX_AbilitySystemLibrary::InitializeChildViews(UWidget* RootWidget)
 {
 	if (!IsValid(RootWidget)) return;
 
-	// If RootWidget implements IX_UI_ViewInterface, trigger its PerformInitialization execution.
+	// If RootWidget is a View that implements IX_UI_ViewInterface, trigger its PerformInitialization execution.
 	if (RootWidget->Implements<UX_UI_ViewInterface>())
 	{
 		IX_UI_ViewInterface::Execute_PerformInitialization(RootWidget);

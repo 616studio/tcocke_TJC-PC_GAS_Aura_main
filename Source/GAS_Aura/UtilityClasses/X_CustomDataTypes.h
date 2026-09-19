@@ -10,6 +10,7 @@
 #include "X_CustomDataTypes.generated.h"
 
 // Forward declarations
+class UInputAction;
 class UTexture2D;
 class UAbilitySystemComponent;
 class AActor;
@@ -24,7 +25,7 @@ class UBehaviorTree;
  * </summary>
  */
 
-#pragma region GAS
+#pragma region Gameplay Effect Actor Specific
 
 /**
  * <summary>
@@ -63,9 +64,13 @@ enum class EGameplayEffectRemovalPolicy : uint8
     DoNotRemove
 };
 
+#pragma endregion Gameplay Effect Actor Specific
+
+#pragma region GAS Specific
+
 /**
  * <summary>
- * Helper struct to extract data from the <c>FGameplayEffectModCallbackData</c> payload received from <c>PostGameplayEffectExecute</c>.
+ * Helper struct to extract data from the <c>FGameplayEffectModCallbackData</c> payload.
  * </summary>
  * <remarks>
  * <b>ARCHITECTURE NOTES:</b>
@@ -114,6 +119,10 @@ struct FX_EffectProperties
     UPROPERTY()
     ACharacter* SourceCharacter = nullptr;	
 };
+
+#pragma endregion GAS Specific
+
+#pragma region Character Specific
 
 /**
  * <summary>
@@ -286,7 +295,7 @@ struct FX_GameplayTaggedAnimMontage
     float ImpactDelay = 0.5f;
 };
 
-#pragma endregion GAS
+#pragma endregion Character Specific
 
 #pragma region UI
 
@@ -307,7 +316,7 @@ struct FX_GameplayTaggedAnimMontage
  * </remarks>
  */
 USTRUCT(BlueprintType)
-struct FScreenMessageItemPickupRowStructure : public FTableRowBase
+struct FX_ScreenMessageItemPickupRowStructure : public FTableRowBase
 {
 	GENERATED_BODY()
 
@@ -331,7 +340,7 @@ struct FScreenMessageItemPickupRowStructure : public FTableRowBase
  * </summary>
  */
 USTRUCT(BlueprintType)
-struct FAttributeDisplayInfo
+struct FX_AttributeDisplayInfoContainer
 {
 	GENERATED_BODY()
 	
@@ -407,7 +416,7 @@ struct FAttributeDisplayInfo
  * </remarks>
  */
 USTRUCT(BlueprintType)
-struct FX_AttributeDisplayProgressBar
+struct FX_AttributeDisplayProgressBarContainer
 {
 	GENERATED_BODY()
 
@@ -431,12 +440,12 @@ struct FX_AttributeDisplayProgressBar
  * </remarks>
  */
 USTRUCT(BlueprintType)
-struct FModelsPayload
+struct FX_ModelsPayload
 {
 	GENERATED_BODY()
 
-	FModelsPayload() {}
-	FModelsPayload(
+	FX_ModelsPayload() {}
+	FX_ModelsPayload(
 		APlayerController* InPlayerController,
 		APlayerState* InPlayerState,
 		UAbilitySystemComponent* InAbilitySystemComponent,
@@ -463,3 +472,24 @@ struct FModelsPayload
 };
 
 #pragma endregion UI
+
+#pragma region Input
+
+/**
+ * <summary>
+ * Maps Input Actions to Gameplay Tags.
+ * </summary>
+ */
+USTRUCT(BlueprintType)
+struct FX_InputActionGameplayTag
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, Category="***CUSTOM|Input")
+	TObjectPtr<UInputAction> InputAction = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category="***CUSTOM|Input")
+	FGameplayTag InputTag = FGameplayTag();
+};
+
+#pragma endregion Input

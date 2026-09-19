@@ -6,7 +6,8 @@
 #include "Engine/DataAsset.h"
 #include "X_AttributeDisplayInfo.generated.h"
 
-struct FAttributeDisplayInfo;
+struct FGameplayTag;
+struct FX_AttributeDisplayInfoContainer;
 
 /**
  * <summary>
@@ -28,7 +29,7 @@ public:
 
 	/**
 	 * <summary>
-	 * Defines the structural layout of the Data Asset as an array of <c>FAttributeDisplayInfo</c> mappings.
+	 * Defines the structural layout of the Data Asset as an array of <c>FX_AttributeDisplayInfoContainer</c> mappings.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
@@ -38,7 +39,7 @@ public:
 	 * </remarks>
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "{AttributeName}"))
-	TArray<FAttributeDisplayInfo> AttributeMappings;
+	TArray<FX_AttributeDisplayInfoContainer> AttributeMappings;
 	
 #if WITH_EDITOR
 	

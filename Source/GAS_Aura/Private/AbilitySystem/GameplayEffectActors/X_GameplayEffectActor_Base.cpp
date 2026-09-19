@@ -15,7 +15,6 @@ AX_GameplayEffectActor_Base::AX_GameplayEffectActor_Base()
 	bReplicates = true;
 }
 
-// Called when the game starts or when spawned
 void AX_GameplayEffectActor_Base::BeginPlay()
 {
 	Super::BeginPlay();
@@ -25,7 +24,7 @@ void AX_GameplayEffectActor_Base::BeginPlay()
 
 void AX_GameplayEffectActor_Base::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	// Preserves native engine delegates and allows child Blueprints to optionally listen to ActorBeginOverlap
+	// Preserves native engine delegates and allows child Blueprints to optionally listen to ActorBeginOverlap.
 	Super::NotifyActorBeginOverlap(OtherActor);
 
 	// Authoritative server guard for GAS effect application.
@@ -66,7 +65,7 @@ bool AX_GameplayEffectActor_Base::ApplyGameplayEffectToTarget(AActor* TargetActo
 	// Since this class was built solely to apply Gameplay Effects that it owns, it will be both the Instigator and EffectCauser.
 	EffectContextHandle.AddInstigator(GetInstigator(), this);
 	
-	// Explicitly set SourceObject so MMCs, ExecCalcs, and Gameplay Cues can query 'this'.
+	// Explicitly set SourceObject to be this class so MMCs, ExecCalcs, and Gameplay Cues can query 'this'.
 	EffectContextHandle.AddSourceObject(this);
 
 	// GAS requires GE's to be wrapped a second time in a SpecHandle so it can be properly referenced when instantiated (especially when applied multiple times to multiple targets).	

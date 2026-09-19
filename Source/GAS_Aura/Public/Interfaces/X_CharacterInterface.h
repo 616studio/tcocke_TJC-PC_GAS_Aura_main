@@ -16,7 +16,9 @@ class UX_CharacterInterface : public UInterface
 };
 
 /**
- * 
+ * <summary>
+ * Properties common to all Character types that can be accessed by external callers without requiring casting to a specific Character class.
+ * </summary>
  */
 class GAS_AURA_API IX_CharacterInterface
 {

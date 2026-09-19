@@ -9,7 +9,7 @@
 #include "X_HUD.generated.h"
 
 // Forward declarations.
-struct FModelsPayload;
+struct FX_ModelsPayload;
 class UX_UI_Controller_Base;
 class UAbilitySystemComponent;
 class UAttributeSet;
@@ -81,7 +81,7 @@ protected:
 	
 	/**
 	 * <summary>
-	 * Internal worker function that performs registry lookup, instantiation, model payload injection, and delegate initialization.
+	 * Internal worker function that performs registry lookup, instantiation, Model payload injection, and delegate initialization for UI Controllers.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
@@ -123,7 +123,7 @@ protected:
 	 * </remarks>
 	 */
 	UPROPERTY()
-	FModelsPayload CurrentModelsPayload;
+	FX_ModelsPayload CurrentModelsPayload;
 
 	/**
 	 * <summary>

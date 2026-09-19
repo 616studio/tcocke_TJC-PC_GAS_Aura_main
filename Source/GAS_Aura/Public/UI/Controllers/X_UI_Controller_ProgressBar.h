@@ -78,7 +78,7 @@ protected:
 	 * </summary>
 	 */
 	UPROPERTY(BlueprintAssignable, Category = "***CUSTOM|Attributes")
-	FX_AttributeDisplayProgressBarSignature OnAttributeValueChanged;
+	FX_AttributeDisplayProgressBarSignature OnAttributeValueChangedDelegate;
 
 	/**
 	 * <summary>
@@ -86,5 +86,5 @@ protected:
 	 * </summary>
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "***CUSTOM|Attributes")
-	FX_AttributeDisplayProgressBar AttributeInfo;
+	FX_AttributeDisplayProgressBarContainer AttributeInfo;
 };

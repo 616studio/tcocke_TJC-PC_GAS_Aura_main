@@ -3,7 +3,7 @@
 #include "AbilitySystem/X_AbilitySystemComponent.h"
 #include "GAS_Aura/UtilityClasses/X_GameplayTags.h"
 
-void UX_AbilitySystemComponent::BindToGameplayEffectDelegate()
+void UX_AbilitySystemComponent::BindToGameplayEffectUIMessageAssetTagsDelegate()
 {
 	if (bDelegatesBound) return;
 	
@@ -27,7 +27,7 @@ void UX_AbilitySystemComponent::CheckGameplayEffectHasMatchingAssetTags(UAbility
 
 void UX_AbilitySystemComponent::Client_GameplayEffectAppliedToSelf_Implementation(const FGameplayTagContainer& AssetTags)
 {
-	OnIncomingGameplayEffectAssetTags.Broadcast(AssetTags);
+	OnIncomingGameplayEffectUIMessageAssetTagsDelegate.Broadcast(AssetTags);
 }
 
 void UX_AbilitySystemComponent::AbilityInputTagPressedAndHeld(const FGameplayTag& InputTag)

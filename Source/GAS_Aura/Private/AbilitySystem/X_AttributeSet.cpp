@@ -58,6 +58,15 @@ void UX_AttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, f
 			SetHealth(NewValue);
 		}
 	}
+	
+	// Clamps current Mana down to new MaxMana when MaxMana changes result in Mana being larger than MaxMana.
+	if (Attribute == GetMaxManaAttribute())
+	{
+		if (GetMana() > NewValue)
+		{
+			SetMana(NewValue);
+		}
+	}
 }
 
 void UX_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -268,7 +277,7 @@ void UX_AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& 
      	
 	if (!Data.EffectSpec.GetContext().IsValid()) return;
 	
-	// Store the Effect Context Handle in our EffectProperties struct payload.
+	// Store the Effect Context Handle.
 	EffectProperties.EffectContextHandle = Data.EffectSpec.GetContext();
 	
 	// Extract the SOURCE data.
@@ -298,7 +307,7 @@ void UX_AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& 
 	// Extract the TARGET data.
 	// The Target ASC is always the ASC that owns this AttributeSet.
 	// It is guaranteed valid inside PostGameplayEffectExecute, so we assign it unconditionally.
-	// However, the AvatarActor may be invalid (ex: if the character was just destroyed this frame), which is why we check it safely below.
+	// However, the AvatarActor may be invalid (ex: if the Character was just destroyed this frame), which is why we check it safely below.
 	EffectProperties.TargetASC = &Data.Target;
 
 	// Try to get all the Target data.

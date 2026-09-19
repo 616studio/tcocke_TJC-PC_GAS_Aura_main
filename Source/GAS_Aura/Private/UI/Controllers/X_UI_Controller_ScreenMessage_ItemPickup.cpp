@@ -21,7 +21,7 @@ void UX_UI_Controller_ScreenMessage_ItemPickup::BindCallbacksToModelDelegates()
 		return;
 	}
 	
-	BindToGameplayEffectAssetTagsDelegate(XASC);
+	BindToGameplayEffectUIMessageAssetTagsDelegate(XASC);
 
 	// All delegate bindings succeeded. 
 	// Check this flag at the top of the function to prevent double-binding.
@@ -39,7 +39,7 @@ void UX_UI_Controller_ScreenMessage_ItemPickup::PreloadScreenMessageDataTableAss
 
 	for (const FName& RowName : RowNames)
 	{
-		if (const FScreenMessageItemPickupRowStructure* Row = DataTableScreenMessageItemPickup->FindRow<FScreenMessageItemPickupRowStructure>(RowName, TEXT("PreloadScreenMessageDataTableAssets")))
+		if (const FX_ScreenMessageItemPickupRowStructure* Row = DataTableScreenMessageItemPickup->FindRow<FX_ScreenMessageItemPickupRowStructure>(RowName, TEXT("PreloadScreenMessageDataTableAssets")))
 		{
 			if (!Row->Image.IsNull())
 			{
@@ -75,7 +75,7 @@ void UX_UI_Controller_ScreenMessage_ItemPickup::OnScreenMessageAssetsPreloaded(T
 	}
 }
 
-void UX_UI_Controller_ScreenMessage_ItemPickup::BindToGameplayEffectAssetTagsDelegate(UX_AbilitySystemComponent* XASC)
+void UX_UI_Controller_ScreenMessage_ItemPickup::BindToGameplayEffectUIMessageAssetTagsDelegate(UX_AbilitySystemComponent* XASC)
 {
 	if (!ensureMsgf(IsValid(XASC), TEXT("Actor: %s - No valid (XASC) found.  Function: %hs"),
 	               *GetName(), __FUNCTION__))
@@ -94,7 +94,7 @@ void UX_UI_Controller_ScreenMessage_ItemPickup::BindToGameplayEffectAssetTagsDel
 	PreloadScreenMessageDataTableAssets();
 	
 	// Always use AddWeakLambda when binding to delegates that might outlive the UI widget.
-	XASC->OnIncomingGameplayEffectAssetTags.AddWeakLambda(this,
+	XASC->OnIncomingGameplayEffectUIMessageAssetTagsDelegate.AddWeakLambda(this,
 	[this](const FGameplayTagContainer& GameplayEffectAssetTags)
 	{
 		// Ensure Data Table reference wasn't cleared at runtime.
@@ -106,12 +106,12 @@ void UX_UI_Controller_ScreenMessage_ItemPickup::BindToGameplayEffectAssetTagsDel
 			if (Tag.MatchesTag(XGameplayTags::UI_Message_Item))
 			{
 				// Use our Ability System Library to find the matching row in the Data Table.
-				const FScreenMessageItemPickupRowStructure* Row = UX_AbilitySystemLibrary::GetDataTableRowByTag<FScreenMessageItemPickupRowStructure>(DataTableScreenMessageItemPickup, Tag);
+				const FX_ScreenMessageItemPickupRowStructure* Row = UX_AbilitySystemLibrary::GetDataTableRowByTag<FX_ScreenMessageItemPickupRowStructure>(DataTableScreenMessageItemPickup, Tag);
 						
 				// If a matching row was successfully found, broadcast that row's data.
 				if (Row)
 				{
-					OnScreenMessageItemPickup.Broadcast(*Row);
+					OnScreenMessageItemPickupDelegate.Broadcast(*Row);
 				}
 				else
 				{

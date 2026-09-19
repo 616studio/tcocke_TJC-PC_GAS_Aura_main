@@ -3,7 +3,7 @@
 #include "UI/Controllers/X_UI_Controller_Base.h"
 #include "GAS_Aura/UtilityClasses/X_CustomDataTypes.h"
 
-void UX_UI_Controller_Base::AssignModelsToController(const FModelsPayload& Models)
+void UX_UI_Controller_Base::AssignModelsToController(const FX_ModelsPayload& Models)
 {
 	PlayerController = Models.PlayerController;
 	PlayerState = Models.PlayerState;

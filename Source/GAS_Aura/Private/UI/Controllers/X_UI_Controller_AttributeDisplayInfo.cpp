@@ -16,7 +16,7 @@ void UX_UI_Controller_AttributeDisplayInfo::BroadcastCurrentModelValues()
 	if (!Cast<UX_AttributeSet>(AttributeSet)) return;
 	
 	// Iterates through the Data Asset to broadcast initial Attribute states to listening Views of this Controller.
-	for (FAttributeDisplayInfo& Info : AttributeDisplayInfoDataAsset->AttributeMappings)
+	for (FX_AttributeDisplayInfoContainer& Info : AttributeDisplayInfoDataAsset->AttributeMappings)
 	{
 		BroadcastAttributeDisplayInfo(Info);
 	}
@@ -35,10 +35,10 @@ void UX_UI_Controller_AttributeDisplayInfo::BindCallbacksToModelDelegates()
 	// Attempting to evaluate these pointers on a different AttributeSet class will read invalid memory and risk a fatal crash.
 	if (!Cast<UX_AttributeSet>(AttributeSet)) return;
 
-	// Loop through each FAttributeDisplayInfo entry (Info) in AttributeDisplayInfoDataAsset.
+	// Loop through each FX_AttributeDisplayInfoContainer entry (Info) in AttributeDisplayInfoDataAsset.
 	// Pass in each Attribute to bind to the native GAS engine delegate GetGameplayAttributeValueChangeDelegate (which ultimately leads to GameplayEffectTypes::FOnAttributeChangeData).
 	// When a change in an Attribute is detected, pass in the Info struct of the Attribute that changed into helper function BroadcastAttributeDisplayInfo.
-	for (FAttributeDisplayInfo& Info : AttributeDisplayInfoDataAsset->AttributeMappings)
+	for (FX_AttributeDisplayInfoContainer& Info : AttributeDisplayInfoDataAsset->AttributeMappings)
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Info.Attribute).AddWeakLambda(this,
 			
@@ -59,7 +59,7 @@ void UX_UI_Controller_AttributeDisplayInfo::BindCallbacksToModelDelegates()
 	bCallbacksBound = true;
 }
 
-void UX_UI_Controller_AttributeDisplayInfo::BroadcastAttributeDisplayInfo(FAttributeDisplayInfo Info) const
+void UX_UI_Controller_AttributeDisplayInfo::BroadcastAttributeDisplayInfo(FX_AttributeDisplayInfoContainer Info) const
 {
 	// By passing our AttributeSet into GetNumericValue, the native GAS engine dynamically looks up whatever float value is currently stored there.
 	Info.AttributeValue = Info.Attribute.GetNumericValue(AttributeSet);

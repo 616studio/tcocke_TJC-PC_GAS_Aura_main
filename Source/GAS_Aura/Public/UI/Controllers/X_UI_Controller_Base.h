@@ -6,7 +6,9 @@
 #include "UObject/Object.h"
 #include "X_UI_Controller_Base.generated.h"
 
+
 // Forward declarations.
+struct FX_ModelsPayload;
 class UAbilitySystemComponent;
 class UAttributeSet;
 class APlayerController;
@@ -41,7 +43,7 @@ public:
 
 	/**
 	 * <summary>
-	 * Extracts the individual Model pointers from <c>FModelsPayload</c> and caches them internally.
+	 * Extracts the individual Model pointers from <c>FX_ModelsPayload</c> and caches them internally.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
@@ -50,10 +52,10 @@ public:
 	 * <item><description>Must be called immediately after instantiation (in C++ or Blueprints) to provide the Models required for <b>[Step 2 - Bind Callbacks]</b>.</description></item>
 	 * </list>
 	 * </remarks>
-	 * <param name="Models">[<c>const FModelsPayload&</c>]: Struct payload containing pointers to the Models (<c>PC</c>, <c>PS</c>, <c>ASC</c>, and <c>AS</c>).</param>
+	 * <param name="Models">[<c>const FX_ModelsPayload&</c>]: Struct payload containing pointers to the Models (<c>PC</c>, <c>PS</c>, <c>ASC</c>, and <c>AS</c>).</param>
 	 */
 	UFUNCTION(BlueprintCallable)
-	void AssignModelsToController(const FModelsPayload& Models);
+	void AssignModelsToController(const FX_ModelsPayload& Models);
 
 	/**
 	 * <summary>

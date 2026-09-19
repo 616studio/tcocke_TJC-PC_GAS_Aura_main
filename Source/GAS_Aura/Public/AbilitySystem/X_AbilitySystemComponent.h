@@ -41,7 +41,7 @@ public:
 	 * </list>
 	 * </remarks>
 	 */
-	void BindToGameplayEffectDelegate();
+	void BindToGameplayEffectUIMessageAssetTagsDelegate();
 	
 	/**
 	 * <summary>
@@ -66,13 +66,13 @@ public:
 	 * Broadcasts the Asset Tags of type "UI.Message" from any Gameplay Effect applied <b>TO</b> this ASC (by its owner or another Actor).
 	 * </summary>
 	 */
-	FX_GameplayEffectAssetTagsSignature OnIncomingGameplayEffectAssetTags;
+	FX_GameplayEffectUIMessageAssetTagsSignature OnIncomingGameplayEffectUIMessageAssetTagsDelegate;
 	
 protected:
 	
 	/**
 	 * <summary>
-	 * Server-side callback function executed when <c>OnGameplayEffectAppliedDelegateToSelf</c> broadcasts. Filters for UI message tags before initiating network RPC serialization.
+	 * Server-side callback function executed when native GAS ASC delegate <c>OnGameplayEffectAppliedDelegateToSelf</c> broadcasts. Filters for UI message tags before initiating network RPC serialization.
 	 * </summary>
 	 * <param name="ASC">[<c>UAbilitySystemComponent*</c>]: Pointer to the ASC receiving the Gameplay Effect.</param>
 	 * <param name="EffectSpec">[<c>const FGameplayEffectSpec&amp;</c>]: The complete specification of the applied Gameplay Effect, containing its duration, context, and asset tags.</param>

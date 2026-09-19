@@ -9,6 +9,9 @@
 
 #pragma region UHT Hack
 
+// Forward declarations.
+class AX_HUD;
+
 /**
  * <summary>
  * This file was designed to keep all custom delegates in their own "class" file.  Adding this dummy struct tricks the Unreal Header Tool into indexing this file so our DYNAMIC delegates work!
@@ -31,6 +34,25 @@ struct FX_CustomDelegates_DummyStruct
 
 #pragma endregion UHT Hack
 
+#pragma region HUD
+
+/**
+ * <summary>
+ * Used to broadcast to the local client immediately after <c>ClientSetHUD</c> instantiates the HUD.
+ * </summary>
+ * <remarks>
+ * <b>ARCHITECTURE NOTES:</b>
+ * <list type="bullet">
+ * <item><description>Enables zero-tick, event-driven UI initialization to resolve client replication timing race conditions, where the PlayerState, PlayerController, and HUD replicate down to the client on completely different frames.</description></item>
+ * </list>
+ * </remarks>
+ * <param name="HUDInstance">[<c>AX_HUD*</c>]: Valid pointer to the newly instantiated local HUD actor.</param>
+ */
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FX_OnHUDInitializedSignature, AX_HUD* /* HUD instance */);
+
+#pragma endregion HUD
+
 #pragma region UI
 
 /**
@@ -46,7 +68,7 @@ struct FX_CustomDelegates_DummyStruct
  * </remarks>
  * <param name="AssetTags">The container of Gameplay Tags extracted directly from the applied Gameplay Effect.</param>
  */
-DECLARE_MULTICAST_DELEGATE_OneParam(FX_GameplayEffectAssetTagsSignature, const FGameplayTagContainer& /* AssetTags */);
+DECLARE_MULTICAST_DELEGATE_OneParam(FX_GameplayEffectUIMessageAssetTagsSignature, const FGameplayTagContainer& /* AssetTags */);
 
 /**
  * <summary>
@@ -58,9 +80,9 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FX_GameplayEffectAssetTagsSignature, const F
  * <item><description><b>Event-Driven UI:</b> Allows the UI to visually react to item pickups by the Player purely driven by incoming Gameplay Tags.</description></item>
  * </list>
  * </remarks>
- * <param name="Row">The <c>FScreenMessageItemPickupRowStructure</c> row structure containing the Message, Image, and View required to display the message on the screen.</param>
+ * <param name="Row">The <c>FX_ScreenMessageItemPickupRowStructure</c> row structure containing the Message, Image, and View required to display the message on the screen.</param>
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FX_ScreenMessageItemPickupSignature, FScreenMessageItemPickupRowStructure, Row);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FX_ScreenMessageItemPickupSignature, FX_ScreenMessageItemPickupRowStructure, Row);
 
 /**
  * <summary>
@@ -70,24 +92,18 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FX_ScreenMessageItemPickupSignature,
  * <b>ARCHITECTURE NOTES:</b>
  * <list type="bullet">
  * <item><description><b>Data-Driven UI:</b> Enables a scalable UI architecture. Instead of creating separate delegates for Strength, Intelligence, Armor, etc., this single delegate broadcasts any attribute that changes.</description></item>
- * <item><description><b>MVC UI Pipeline:</b> The Controller does the heavy lifting: it grabs the raw float from the Model, packages it into the <c>FAttributeDisplayInfo</c> struct alongside the localized text and associated Gameplay Tag from the Data Asset, and pushes the finalized payload out to any listening Views.</description></item>
+ * <item><description><b>MVC UI Pipeline:</b> The Controller does the heavy lifting: it grabs the raw float from the Model, packages it into the <c>FX_AttributeDisplayInfoContainer</c> struct alongside the localized text and associated Gameplay Tag from the Data Asset, and pushes the finalized payload out to any listening Views.</description></item>
  * </list>
  * </remarks>
- * <param name="AttributeDisplayInfo">The packaged struct payload containing the Gameplay Attribute's Tag, localized display name, localized description, and current numeric value.</param>
+ * <param name="AttributeDisplayInfoContainer">The packaged struct payload containing the Gameplay Attribute's Tag, localized display name, localized description, and current numeric value.</param>
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FX_AttributeDisplayInfoSignature, const FAttributeDisplayInfo&, AttributeDisplayInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FX_AttributeDisplayInfoSignature, const FX_AttributeDisplayInfoContainer&, AttributeDisplayInfoContainer);
 
 /**
  * <summary>
  * Broadcasts a consolidated Gameplay Attribute payload for the Current and Max Values for UI elements to properly display the correct percentage values on "frame 0" of their initialization.
  * </summary>
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FX_AttributeDisplayProgressBarSignature, const FX_AttributeDisplayProgressBar&, DisplayInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FX_AttributeDisplayProgressBarSignature, const FX_AttributeDisplayProgressBarContainer&, AttributeDisplayInfoContainer);
 
 #pragma endregion UI
-
-#pragma region GAS
-
-
-
-#pragma endregion GAS

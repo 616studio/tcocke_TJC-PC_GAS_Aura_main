@@ -10,7 +10,7 @@
 class UX_AttributeDisplayInfo;
 /**
  * <summary>
- * Controller designed specifically for detecting Gameplay Attribute changes and broadcasting a fully constructed <c>FAttributeDisplayInfo</c> payload.
+ * Controller designed specifically for detecting Gameplay Attribute changes and broadcasting a fully constructed <c>FX_AttributeDisplayInfoContainer</c> payload.
  * </summary>
  * <remarks>
  * <b>ARCHITECTURE NOTES:</b>
@@ -56,7 +56,7 @@ class GAS_AURA_API UX_UI_Controller_AttributeDisplayInfo : public UX_UI_Controll
 	
 	/**
 	 * <summary>
-	 * Delegate responsible for broadcasting an <c>FAttributeDisplayInfo</c> payload.
+	 * Delegate responsible for broadcasting an <c>FX_AttributeDisplayInfoContainer</c> payload.
 	 * </summary>
 	 */
 	UPROPERTY(BlueprintAssignable, Category = "***CUSTOM|Attributes")
@@ -71,7 +71,7 @@ protected:
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
 	 * <list type="bullet">
-	 * <item><description>The Data Asset class (<c>X_AttributeDisplayInfo</c>) is a <c>TArray</c> of <c>FAttributeDisplayInfo</c> structs.</description></item>
+	 * <item><description>The Data Asset class (<c>X_AttributeDisplayInfo</c>) is a <c>TArray</c> of <c>FX_AttributeDisplayInfoContainer</c> structs.</description></item>
 	 * </list>
 	 * </remarks>
 	 */
@@ -82,7 +82,7 @@ private:
 
 	/**
 	 * <summary>
-	 * Helper function to consolidate the Attribute value extraction and broadcasting process involving the <c>FAttributeDisplayInfo</c> payload.
+	 * Helper function to consolidate the Attribute value extraction and broadcasting process involving the <c>FX_AttributeDisplayInfoContainer</c> payload.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b> 
@@ -92,7 +92,7 @@ private:
 	 * <item><description>Updates payload with the extracted numeric value, and then broadcasts the updated payload using <c>AttributeDisplayInfoDelegate</c>.</description></item>
 	 * </list>
 	 * </remarks>
-	 * <param name="Info">[<c>FAttributeDisplayInfo</c>]: The struct payload containing the Gameplay Attribute we need to evaluate.</param>
+	 * <param name="Info">[<c>FX_AttributeDisplayInfoContainer</c>]: The struct payload containing the Gameplay Attribute we need to evaluate.</param>
 	 */
-	void BroadcastAttributeDisplayInfo(FAttributeDisplayInfo Info) const;
+	void BroadcastAttributeDisplayInfo(FX_AttributeDisplayInfoContainer Info) const;
 };

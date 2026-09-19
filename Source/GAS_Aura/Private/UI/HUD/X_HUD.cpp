@@ -19,7 +19,7 @@ void AX_HUD::InitHUD(APlayerController* PC, APlayerState* PS, UAbilitySystemComp
 	}
 	
 	// Store Model context payload locally for lazy Controller instantiation.
-	CurrentModelsPayload = FModelsPayload(PC, PS, ASC, AS);
+	CurrentModelsPayload = FX_ModelsPayload(PC, PS, ASC, AS);
 	
 	// Cascade updated Models and re-bind delegates for all ALREADY-instantiated controllers (handles Pawn respawns/re-possession).
 	for (const TPair<TSubclassOf<UX_UI_Controller_Base>, TObjectPtr<UX_UI_Controller_Base>>& KVP : ControllerRegistry)
@@ -58,13 +58,12 @@ void AX_HUD::InitHUD(APlayerController* PC, APlayerState* PS, UAbilitySystemComp
 		
 	}
 	
-	// Broadcast initialization signal down the View tree (Child sub-widgets pull Controllers via UX_AbilitySystemLibrary).
+	// Broadcast initialization signal down the View tree (child Views attached in the Designer Hierarchy pull Controllers via UX_AbilitySystemLibrary).
 	if (View_HUD->Implements<UX_UI_ViewInterface>())
 	{
 		IX_UI_ViewInterface::Execute_PerformInitialization(View_HUD);
 	}
 	
-	// Render top-level layout container to Viewport.
 	View_HUD->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	if (!View_HUD->IsInViewport())
 	{

@@ -2,7 +2,7 @@
 
 #include "DataAssets/X_CharacterClassInfo.h"
 
-const FX_CharacterClassDefaultInfo* UX_CharacterClassInfo::GetCharacterClassDefaultInfo(const ECharacterClass CharacterClass) const
+const FX_CharacterClassDefaultInfo* UX_CharacterClassInfo::GetCharacterClassDefaultInfo(const EX_CharacterClass CharacterClass) const
 {
 	return CharacterClassInformation.Find(CharacterClass);
 }

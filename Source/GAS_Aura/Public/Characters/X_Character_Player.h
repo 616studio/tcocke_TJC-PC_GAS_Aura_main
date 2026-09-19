@@ -53,9 +53,9 @@ public:
 	
 	virtual void SetCharacterLevel(int32 Level) override;
 	
-	virtual ECharacterClass GetCharacterClass() const override;
+	virtual EX_CharacterClass GetCharacterClass() const override;
 	
-	virtual void SetCharacterClass(const ECharacterClass NewClassType) override;
+	virtual void SetCharacterClass(const EX_CharacterClass NewClassType) override;
 	
 	/**
 	 * <summary>

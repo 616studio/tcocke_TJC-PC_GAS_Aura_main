@@ -46,12 +46,12 @@ public:
 	 * Retrieves the Character's current Class.
 	 * </summary> 
 	 */
-	virtual ECharacterClass GetCharacterClass() const = 0;
+	virtual EX_CharacterClass GetCharacterClass() const = 0;
 
 	/**
 	 * <summary>
 	 * Sets the Character's Class.
 	 * </summary>	 
 	 */
-	virtual void SetCharacterClass(const ECharacterClass NewClassType) = 0;
+	virtual void SetCharacterClass(const EX_CharacterClass NewClassType) = 0;
 };

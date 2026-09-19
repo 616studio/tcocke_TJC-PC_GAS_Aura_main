@@ -130,7 +130,7 @@ struct FX_EffectProperties
  * </summary>
  */
 UENUM(BlueprintType)
-enum class ECharacterClass : uint8
+enum class EX_CharacterClass : uint8
 {
     Elementalist,
     Warrior,
@@ -141,7 +141,7 @@ enum class ECharacterClass : uint8
 
 /**
  * <summary>
- * Helper struct to set the defaults associated with each <c>ECharacterClass</c>.
+ * Helper struct to set the defaults associated with each <c>EX_CharacterClass</c>.
  * </summary>
  */
 USTRUCT(BlueprintType)
@@ -222,7 +222,7 @@ struct FX_CharacterClassDefaultInfo
     
     /**
      * <summary>
-     * Infinite Gameplay Effect used to assign default Gameplay Tags to each <c>ECharacterClass</c>.
+     * Infinite Gameplay Effect used to assign default Gameplay Tags to each <c>EX_CharacterClass</c>.
      * </summary>
      */
     UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Class Defaults")
@@ -230,7 +230,7 @@ struct FX_CharacterClassDefaultInfo
 
     /**
      * <summary>
-     * Default Gameplay Abilities assigned to each <c>ECharacterClass</c>.
+     * Default Gameplay Abilities assigned to each <c>EX_CharacterClass</c>.
      * </summary>
      */
     UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|Class Defaults|Abilities")

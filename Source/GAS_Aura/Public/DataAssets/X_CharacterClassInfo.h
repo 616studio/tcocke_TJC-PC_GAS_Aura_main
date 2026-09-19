@@ -12,7 +12,7 @@ class UGameplayEffect;
 
 /**
  * <summary>
- * Data Asset stored as <c>DA_CharacterClassInfo</c> that contains the default Character specific info for each <c>ECharacterClass</c>.
+ * Data Asset stored as <c>DA_CharacterClassInfo</c> that contains the default Character specific info for each <c>EX_CharacterClass</c>.
  * </summary>
  * <remarks>
  * <list type="bullet">
@@ -28,11 +28,11 @@ class GAS_AURA_API UX_CharacterClassInfo : public UDataAsset
 public:
 	/**
 	 * <summary>
-	 * Maps each <c>ECharacterClass</c> to its default values.
+	 * Maps each <c>EX_CharacterClass</c> to its default values.
 	 * </summary>
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Classes")
-	TMap<ECharacterClass, FX_CharacterClassDefaultInfo> CharacterClassInformation;
+	TMap<EX_CharacterClass, FX_CharacterClassDefaultInfo> CharacterClassInformation;
 
 	/**
 	 * <summary>
@@ -60,11 +60,11 @@ public:
 
 	/**
 	 * <summary>
-	 * Returns the <c>FX_CharacterClassDefaultInfo</c> for the specified <c>ECharacterClass</c>.
+	 * Returns the <c>FX_CharacterClassDefaultInfo</c> for the specified <c>EX_CharacterClass</c>.
 	 * </summary>
 	 * 
 	 */	
-	const FX_CharacterClassDefaultInfo* GetCharacterClassDefaultInfo(ECharacterClass CharacterClass) const;
+	const FX_CharacterClassDefaultInfo* GetCharacterClassDefaultInfo(EX_CharacterClass CharacterClass) const;
 	
 	/**
 	 * <summary>

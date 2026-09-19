@@ -34,14 +34,14 @@ void AX_Character_Player::BeginPlay()
 
 #pragma region Ability System
 
-ECharacterClass AX_Character_Player::GetCharacterClass() const
+EX_CharacterClass AX_Character_Player::GetCharacterClass() const
 {
 	const AX_PlayerState* PS = GetPlayerState<AX_PlayerState>();
 
 	if (!ensureMsgf(IsValid(PS), TEXT("Actor: %s - No valid (PS) found.  Function: %hs"),
 	               *GetName(), __FUNCTION__))
 	{
-		return ECharacterClass::Unassigned;
+		return EX_CharacterClass::Unassigned;
 	}
 	
 	return PS->GetPlayerCharacterClass();
@@ -73,7 +73,7 @@ void AX_Character_Player::SetCharacterLevel(int32 Level)
 	PS->SetPlayerCharacterLevel(Level);
 }
 
-void AX_Character_Player::SetCharacterClass(const ECharacterClass NewClassType)
+void AX_Character_Player::SetCharacterClass(const EX_CharacterClass NewClassType)
 {
 	AX_PlayerState* PS = GetPlayerState<AX_PlayerState>();
 	

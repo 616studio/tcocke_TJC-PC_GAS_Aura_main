@@ -45,11 +45,11 @@ void AX_Character_Base::SetCharacterLevel(const int32 NewLevel)
 {
 }
 
-void AX_Character_Base::SetCharacterClass(const ECharacterClass NewClassType)
+void AX_Character_Base::SetCharacterClass(const EX_CharacterClass NewClassType)
 {
 }
 
-void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, const ECharacterClass InCharacterClass, const int32 InCharacterLevel)
+void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, const EX_CharacterClass InCharacterClass, const int32 InCharacterLevel)
 {
 	// Retrieve CharacterClassInfo from GameState.
 	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
@@ -128,7 +128,7 @@ void AX_Character_Base::InitializeAttributes(UObject* InSourceObject, AActor* In
 }
 
 void AX_Character_Base::InitializeDefaultGameplayTags(UObject* InSourceObject, AActor* InInstigator,
-	AActor* InEffectCauser, const ECharacterClass InCharacterClass, const int32 InCharacterLevel)
+	AActor* InEffectCauser, const EX_CharacterClass InCharacterClass, const int32 InCharacterLevel)
 {
 	// Retrieve CharacterClassInfo from GameState.
 	// Stored on GameState rather than GameMode so client calculations can share the same Data Asset as the server.
@@ -169,7 +169,7 @@ void AX_Character_Base::InitializeDefaultGameplayTags(UObject* InSourceObject, A
 	ApplyGameplayEffectToSelf(DefaultGameplayTags, InSourceObject, InInstigator, InEffectCauser, InCharacterLevel);
 }
 
-void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const ECharacterClass InCharacterClass, const int32 InCharacterLevel)
+void AX_Character_Base::GrantClassDefaultGameplayAbilitiesOnStartup(const EX_CharacterClass InCharacterClass, const int32 InCharacterLevel)
 {
 	// We only want to grant Gameplay Abilities on the Server Side.
 	if (!HasAuthority()) return;

@@ -108,7 +108,7 @@ public:
 	 * </list>
 	 * </remarks>
 	 */
-	virtual ECharacterClass GetCharacterClass() const override { return ECharacterClass::Unassigned; }
+	virtual EX_CharacterClass GetCharacterClass() const override { return EX_CharacterClass::Unassigned; }
 	
 	/**
 	 * <summary>
@@ -122,7 +122,7 @@ public:
 	 * </list>
 	 * </remarks>
 	 */
-	virtual void SetCharacterClass(const ECharacterClass NewClass) override;
+	virtual void SetCharacterClass(const EX_CharacterClass NewClass) override;
 	
 protected:
 	
@@ -140,10 +140,10 @@ protected:
 	 * <param name="InSourceObject">[<c>UObject*</c>]: The Object that owns the effect.</param>
 	 * <param name="InInstigator">[<c>AActor*</c>]: The physical Actor that instigated the effect.</param>
 	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical Actor that caused the effect.</param>
-	 * <param name="InCharacterClass">[<c>ECharacterClass</c>]: The Character's current Class.</param>
+	 * <param name="InCharacterClass">[<c>EX_CharacterClass</c>]: The Character's current Class.</param>
 	 * <param name="InCharacterLevel">[<c>int32</c>]: The Character's current Level.</param>
 	 */
-	virtual void InitializeAttributes(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, const ECharacterClass InCharacterClass, const int32 InCharacterLevel);
+	virtual void InitializeAttributes(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, const EX_CharacterClass InCharacterClass, const int32 InCharacterLevel);
 	
 	/**
 	 * <summary>
@@ -157,13 +157,13 @@ protected:
 	 * </list>
 	 * </remarks>
 	 * <param name="InCharacterLevel">[<c>cont int32</c>]: The Level to grant the Gameplay Abilities at based on the Character's current Level.</param>
-	 * <param name="InCharacterClass">[<c>const ECharacterClass</c>]: The Character's current Class used to query <c>DA_CharacterClassInfo</c>.</param>
+	 * <param name="InCharacterClass">[<c>const EX_CharacterClass</c>]: The Character's current Class used to query <c>DA_CharacterClassInfo</c>.</param>
 	 */
-	void GrantClassDefaultGameplayAbilitiesOnStartup(const ECharacterClass InCharacterClass, const int32 InCharacterLevel);
+	void GrantClassDefaultGameplayAbilitiesOnStartup(const EX_CharacterClass InCharacterClass, const int32 InCharacterLevel);
 	
 	/**
 	 * <summary>
-	 * Grants the assigned shared Gameplay Abilities to the Character common to each <c>ECharacterClass</c>.
+	 * Grants the assigned shared Gameplay Abilities to the Character common to each <c>EX_CharacterClass</c>.
 	 * </summary>
 	 * <remarks>
 	 * <b>ARCHITECTURE NOTES:</b>
@@ -185,10 +185,10 @@ protected:
 	 * <param name="InSourceObject">[<c>UObject*</c>]: The Object that owns the effect.</param>
 	 * <param name="InInstigator">[<c>AActor*</c>]: The physical Actor that instigated the effect.</param>
 	 * <param name="InEffectCauser">[<c>AActor*</c>]: The physical Actor that caused the effect.</param>
-	 * <param name="InCharacterClass">[<c>ECharacterClass</c>]: The Character's current Class.</param>
+	 * <param name="InCharacterClass">[<c>EX_CharacterClass</c>]: The Character's current Class.</param>
 	 * <param name="InCharacterLevel">[<c>const int32</c>]: The Level used to scale the Attributes based on the Character's current Level.</param> 
 	 */
-	virtual void InitializeDefaultGameplayTags(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, ECharacterClass InCharacterClass, const int32 InCharacterLevel);
+	virtual void InitializeDefaultGameplayTags(UObject* InSourceObject, AActor* InInstigator, AActor* InEffectCauser, EX_CharacterClass InCharacterClass, const int32 InCharacterLevel);
 	
 	/**
 	 * <summary>

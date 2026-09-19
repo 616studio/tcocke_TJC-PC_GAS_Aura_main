@@ -129,9 +129,9 @@ public:
 	
 	int32 GetPlayerCharacterLevel() const { return PlayerCharacterLevel; }
 	
-	void SetPlayerCharacterClass(const ECharacterClass NewClassType) { PlayerCharacterClass = NewClassType; }
+	void SetPlayerCharacterClass(const EX_CharacterClass NewClassType) { PlayerCharacterClass = NewClassType; }
 	
-	ECharacterClass GetPlayerCharacterClass() const { return PlayerCharacterClass; }
+	EX_CharacterClass GetPlayerCharacterClass() const { return PlayerCharacterClass; }
 			
 protected:
 	/**
@@ -147,7 +147,7 @@ protected:
 	 * </summary>
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "***CUSTOM|GAS|Character Class")
-	ECharacterClass PlayerCharacterClass = ECharacterClass::Hero;
+	EX_CharacterClass PlayerCharacterClass = EX_CharacterClass::Hero;
 	
 private:
 	

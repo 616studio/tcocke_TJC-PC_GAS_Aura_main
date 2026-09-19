@@ -84,7 +84,7 @@ bool AX_GameplayEffectActor_Base::ApplyGameplayEffectToTarget(AActor* TargetActo
 	if (EffectSpec && IsValid(EffectSpec->Def))
 	{
 		if (EffectSpec->Def->DurationPolicy == EGameplayEffectDurationType::Infinite &&
-			InfiniteGameplayEffectRemovalPolicy == EGameplayEffectRemovalPolicy::RemoveOnEndOverlap)
+			InfiniteGameplayEffectRemovalPolicy == EX_GameplayEffectRemovalPolicy::RemoveOnEndOverlap)
 		{
 			ActiveGameplayEffectHandles.Add(ActiveEffectHandle, TargetActorASC);
 		}

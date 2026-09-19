@@ -159,7 +159,7 @@ protected:
 	EGameplayEffectApplicationPolicy InfiniteGameplayEffectApplicationPolicy = EGameplayEffectApplicationPolicy::DoNotApply;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "***CUSTOM|GAS|Gameplay Effects|Infinite")
-	EGameplayEffectRemovalPolicy InfiniteGameplayEffectRemovalPolicy = EGameplayEffectRemovalPolicy::RemoveOnEndOverlap;
+	EX_GameplayEffectRemovalPolicy InfiniteGameplayEffectRemovalPolicy = EX_GameplayEffectRemovalPolicy::RemoveOnEndOverlap;
 	
 	/** 
 	 * <summary>

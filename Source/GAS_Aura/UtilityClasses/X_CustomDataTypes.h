@@ -58,7 +58,7 @@ enum class EGameplayEffectApplicationPolicy : uint8
  * </remarks>
  */
 UENUM(BlueprintType)
-enum class EGameplayEffectRemovalPolicy : uint8
+enum class EX_GameplayEffectRemovalPolicy : uint8
 {
     RemoveOnEndOverlap,
     DoNotRemove
